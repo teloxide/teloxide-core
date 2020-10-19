@@ -214,6 +214,19 @@ macro_rules! impl_payload {
             }
         }
 
+        impl core::convert::AsRef<Self> for $Method {
+            fn as_ref(&self) -> &Self {
+                self
+            }
+        }
+
+        impl core::convert::AsMut<Self> for $Method {
+            fn as_mut(&mut self) -> &mut Self {
+                self
+            }
+        }
+
+
         impl $crate::requests::Payload for $Method {
             type Output = $Ret;
 

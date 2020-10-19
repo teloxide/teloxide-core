@@ -164,18 +164,31 @@ where
     }
 }
 
-impl<R: Request> HasPayload for AutoRequest<R> {
+impl<R> HasPayload for AutoRequest<R>
+where
+    R: Request,
+{
     type Payload = R::Payload;
+}
 
-    fn payload_mut(&mut self) -> &mut Self::Payload {
+impl<R> AsMut<R::Payload> for AutoRequest<R>
+where
+    R: Request,
+{
+    fn as_mut(&mut self) -> &mut R::Payload {
         match &mut self.0 {
             Inner::Request(req) => req.payload_mut(),
             Inner::Future(_) => already_polled(),
             Inner::Done => done_unreachable(),
         }
     }
+}
 
-    fn payload_ref(&self) -> &Self::Payload {
+impl<R> AsRef<R::Payload> for AutoRequest<R>
+where
+    R: Request,
+{
+    fn as_ref(&self) -> &R::Payload {
         match &self.0 {
             Inner::Request(req) => req.payload_ref(),
             Inner::Future(_) => already_polled(),

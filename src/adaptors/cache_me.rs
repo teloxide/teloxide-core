@@ -163,14 +163,27 @@ where
     }
 }
 
-impl<R: Request<Payload = GetMe>> HasPayload for CachedMeRequest<R> {
+impl<R> HasPayload for CachedMeRequest<R>
+where
+    R: Request<Payload = GetMe>,
+{
     type Payload = GetMe;
+}
 
-    fn payload_mut(&mut self) -> &mut Self::Payload {
+impl<R> AsMut<GetMe> for CachedMeRequest<R>
+where
+    R: Request<Payload = GetMe>,
+{
+    fn as_mut(&mut self) -> &mut R::Payload {
         &mut self.1
     }
+}
 
-    fn payload_ref(&self) -> &Self::Payload {
+impl<R> AsRef<GetMe> for CachedMeRequest<R>
+where
+    R: Request<Payload = GetMe>,
+{
+    fn as_ref(&self) -> &R::Payload {
         &self.1
     }
 }

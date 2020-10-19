@@ -53,12 +53,16 @@ where
     P: Payload,
 {
     type Payload = P;
+}
 
-    fn payload_mut(&mut self) -> &mut Self::Payload {
+impl<P> AsMut<P> for JsonRequest<P> {
+    fn as_mut(&mut self) -> &mut P {
         &mut self.payload
     }
+}
 
-    fn payload_ref(&self) -> &Self::Payload {
+impl<P> AsRef<P> for JsonRequest<P> {
+    fn as_ref(&self) -> &P {
         &self.payload
     }
 }
