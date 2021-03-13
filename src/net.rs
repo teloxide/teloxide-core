@@ -12,7 +12,7 @@ mod request;
 mod telegram_response;
 
 /// The default Telegram API URL.
-pub const TELEGRAM_API_URL: &str = "https://api.telegram.org";
+pub const TELEGRAM_API_URL: &str = env!("TELEGRAM_API_URL");
 
 /// Constructs a network client from the `TELOXIDE_PROXY` environmental
 /// variable.
