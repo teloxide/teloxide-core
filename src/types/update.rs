@@ -51,24 +51,24 @@ impl Update {
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(untagged)]
 pub enum UpdateKind {
     /// New incoming message of any kind — text, photo, sticker, etc.
-    Message(Message),
+    Message(UpdateMessage),
 
     /// New version of a message that is known to the bot and was edited.
-    EditedMessage(Message),
+    EditedMessage(UpdateEditedMessage),
 
     /// New incoming channel post of any kind — text, photo, sticker, etc.
-    ChannelPost(Message),
+    ChannelPost(UpdateChannelPost),
 
     /// New version of a channel post that is known to the bot and was edited.
-    EditedChannelPost(Message),
+    EditedChannelPost(UpdateEditedChannelPost),
 
     /// New incoming [inline] query.
     ///
     /// [inline]: https://core.telegram.org/bots/api#inline-mode
-    InlineQuery(InlineQuery),
+    InlineQuery(UpdateInlineQuery),
 
     /// The result of an [inline] query that was chosen by a user and sent to
     /// their chat partner. Please see our documentation on the [feedback
@@ -76,30 +76,30 @@ pub enum UpdateKind {
     ///
     /// [inline]: https://core.telegram.org/bots/api#inline-mode
     /// [feedback collecting]: https://core.telegram.org/bots/inline#collecting-feedback
-    ChosenInlineResult(ChosenInlineResult),
+    ChosenInlineResult(UpdateChosenInlineResult),
 
     /// New incoming callback query.
-    CallbackQuery(CallbackQuery),
+    CallbackQuery(UpdateCallbackQuery),
 
     /// New incoming shipping query. Only for invoices with flexible price.
-    ShippingQuery(ShippingQuery),
+    ShippingQuery(UpdateShippingQuery),
 
     /// New incoming pre-checkout query. Contains full information about
     /// checkout.
-    PreCheckoutQuery(PreCheckoutQuery),
+    PreCheckoutQuery(UpdatePreCheckoutQuery),
 
     /// New poll state. Bots receive only updates about stopped polls and
     /// polls, which are sent by the bot.
-    Poll(Poll),
+    Poll(UpdatePoll),
 
     /// A user changed their answer in a non-anonymous poll. Bots receive new
     /// votes only in polls that were sent by the bot itself.
-    PollAnswer(PollAnswer),
+    PollAnswer(UpdatePollAnswer),
 
     /// The bot's chat member status was updated in a chat. For private chats,
     /// this update is received only when the bot is blocked or unblocked by the
     /// user.
-    MyChatMember(ChatMemberUpdated),
+    MyChatMember(UpdateMyChatMember),
 
     /// A chat member's status was updated in a chat. The bot must be an
     /// administrator in the chat and must explicitly specify
@@ -107,31 +107,142 @@ pub enum UpdateKind {
     /// receive these updates.
     ///
     /// [`AllowedUpdate::ChatMember`]: crate::types::AllowedUpdate::ChatMember
-    ChatMember(ChatMemberUpdated),
+    ChatMember(UpdateChatMember),
+}
+
+/// New incoming message of any kind — text, photo, sticker, etc.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdateMessage {
+    pub message: Message,
+}
+
+/// New version of a message that is known to the bot and was edited.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdateEditedMessage {
+    pub edited_message: Message,
+}
+
+/// New incoming channel post of any kind — text, photo, sticker, etc.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdateChannelPost {
+    pub channel_post: Message,
+}
+
+/// New version of a channel post that is known to the bot and was edited.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdateEditedChannelPost {
+    pub edited_channel_post: Message,
+}
+
+/// New incoming [inline] query.
+///
+/// [inline]: https://core.telegram.org/bots/api#inline-mode
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdateInlineQuery {
+    pub inline_query: InlineQuery,
+}
+
+/// The result of an [inline] query that was chosen by a user and sent to
+/// their chat partner. Please see our documentation on the [feedback
+/// collecting] for details on how to enable these updates for your bot.
+///
+/// [inline]: https://core.telegram.org/bots/api#inline-mode
+/// [feedback collecting]: https://core.telegram.org/bots/inline#collecting-feedback
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdateChosenInlineResult {
+    pub chosen_inline_result: ChosenInlineResult,
+}
+
+/// New incoming callback query.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdateCallbackQuery {
+    pub callback_query: CallbackQuery,
+}
+
+/// New incoming shipping query. Only for invoices with flexible price.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+
+pub struct UpdateShippingQuery {
+    pub shipping_query: ShippingQuery,
+}
+
+/// New incoming pre-checkout query. Contains full information about
+/// checkout.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdatePreCheckoutQuery {
+    pub pre_checkout_query: PreCheckoutQuery,
+}
+
+/// New poll state. Bots receive only updates about stopped polls and
+/// polls, which are sent by the bot.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdatePoll {
+    pub poll: Poll,
+}
+
+/// A user changed their answer in a non-anonymous poll. Bots receive new
+/// votes only in polls that were sent by the bot itself.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdatePollAnswer {
+    pub poll_answer: PollAnswer,
+}
+
+/// The bot's chat member status was updated in a chat. For private chats,
+/// this update is received only when the bot is blocked or unblocked by the
+/// user.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdateMyChatMember {
+    pub my_chat_member: ChatMemberUpdated,
+}
+
+/// A chat member's status was updated in a chat. The bot must be an
+/// administrator in the chat and must explicitly specify
+/// [`AllowedUpdate::ChatMember`] in the list of `allowed_updates` to
+/// receive these updates.
+///
+/// [`AllowedUpdate::ChatMember`]: crate::types::AllowedUpdate::ChatMember
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct UpdateChatMember {
+    pub chat_member: ChatMemberUpdated,
 }
 
 impl Update {
     pub fn user(&self) -> Option<&User> {
         match &self.kind {
-            UpdateKind::Message(m) => m.from(),
-            UpdateKind::EditedMessage(m) => m.from(),
-            UpdateKind::CallbackQuery(query) => Some(&query.from),
-            UpdateKind::ChosenInlineResult(chosen) => Some(&chosen.from),
-            UpdateKind::InlineQuery(query) => Some(&query.from),
-            UpdateKind::ShippingQuery(query) => Some(&query.from),
-            UpdateKind::PreCheckoutQuery(query) => Some(&query.from),
-            UpdateKind::PollAnswer(answer) => Some(&answer.user),
+            UpdateKind::Message(UpdateMessage { message }) => message.from(),
+            UpdateKind::EditedMessage(UpdateEditedMessage { edited_message }) => {
+                edited_message.from()
+            }
+            UpdateKind::CallbackQuery(UpdateCallbackQuery { callback_query }) => {
+                Some(&callback_query.from)
+            }
+            UpdateKind::ChosenInlineResult(UpdateChosenInlineResult {
+                chosen_inline_result,
+            }) => Some(&chosen_inline_result.from),
+            UpdateKind::InlineQuery(UpdateInlineQuery { inline_query }) => Some(&inline_query.from),
+            UpdateKind::ShippingQuery(UpdateShippingQuery { shipping_query }) => {
+                Some(&shipping_query.from)
+            }
+            UpdateKind::PreCheckoutQuery(UpdatePreCheckoutQuery { pre_checkout_query }) => {
+                Some(&pre_checkout_query.from)
+            }
+            UpdateKind::PollAnswer(UpdatePollAnswer { poll_answer }) => Some(&poll_answer.user),
             _ => None,
         }
     }
 
     pub fn chat(&self) -> Option<&Chat> {
         match &self.kind {
-            UpdateKind::Message(m) => Some(&m.chat),
-            UpdateKind::EditedMessage(m) => Some(&m.chat),
-            UpdateKind::ChannelPost(p) => Some(&p.chat),
-            UpdateKind::EditedChannelPost(p) => Some(&p.chat),
-            UpdateKind::CallbackQuery(q) => Some(&q.message.as_ref()?.chat),
+            UpdateKind::Message(UpdateMessage { message: m })
+            | UpdateKind::EditedMessage(UpdateEditedMessage { edited_message: m })
+            | UpdateKind::ChannelPost(UpdateChannelPost { channel_post: m })
+            | UpdateKind::EditedChannelPost(UpdateEditedChannelPost {
+                edited_channel_post: m,
+            }) => Some(&m.chat),
+
+            UpdateKind::CallbackQuery(UpdateCallbackQuery { callback_query: q }) => {
+                Some(&q.message.as_ref()?.chat)
+            }
             _ => None,
         }
     }
@@ -141,7 +252,7 @@ impl Update {
 mod test {
     use crate::types::{
         Chat, ChatKind, ChatPrivate, ForwardKind, ForwardOrigin, MediaKind, MediaText, Message,
-        MessageCommon, MessageKind, Update, UpdateKind, User,
+        MessageCommon, MessageKind, Update, UpdateKind, UpdateMessage, User,
     };
 
     // TODO: more tests for deserialization
@@ -171,43 +282,45 @@ mod test {
 
         let expected = Update {
             id: 892_252_934,
-            kind: UpdateKind::Message(Message {
-                via_bot: None,
-                id: 6557,
-                date: 1_569_518_342,
-                chat: Chat {
-                    id: 218_485_655,
-                    kind: ChatKind::Private(ChatPrivate {
-                        type_: (),
-                        username: Some(String::from("WaffleLapkin")),
-                        first_name: Some(String::from("Waffle")),
-                        last_name: None,
-                        bio: None,
-                    }),
-                    photo: None,
-                    pinned_message: None,
-                },
-                kind: MessageKind::Common(MessageCommon {
-                    from: Some(User {
+            kind: UpdateKind::Message(UpdateMessage {
+                message: Message {
+                    via_bot: None,
+                    id: 6557,
+                    date: 1_569_518_342,
+                    chat: Chat {
                         id: 218_485_655,
-                        is_bot: false,
-                        first_name: String::from("Waffle"),
-                        last_name: None,
-                        username: Some(String::from("WaffleLapkin")),
-                        language_code: Some(String::from("en")),
+                        kind: ChatKind::Private(ChatPrivate {
+                            type_: (),
+                            username: Some(String::from("WaffleLapkin")),
+                            first_name: Some(String::from("Waffle")),
+                            last_name: None,
+                            bio: None,
+                        }),
+                        photo: None,
+                        pinned_message: None,
+                    },
+                    kind: MessageKind::Common(MessageCommon {
+                        from: Some(User {
+                            id: 218_485_655,
+                            is_bot: false,
+                            first_name: String::from("Waffle"),
+                            last_name: None,
+                            username: Some(String::from("WaffleLapkin")),
+                            language_code: Some(String::from("en")),
+                        }),
+                        forward_kind: ForwardKind::Origin(ForwardOrigin {
+                            reply_to_message: None,
+                        }),
+                        edit_date: None,
+                        media_kind: MediaKind::Text(MediaText {
+                            text: String::from("hello there"),
+                            entities: vec![],
+                        }),
+                        reply_markup: None,
+                        sender_chat: None,
+                        author_signature: None,
                     }),
-                    forward_kind: ForwardKind::Origin(ForwardOrigin {
-                        reply_to_message: None,
-                    }),
-                    edit_date: None,
-                    media_kind: MediaKind::Text(MediaText {
-                        text: String::from("hello there"),
-                        entities: vec![],
-                    }),
-                    reply_markup: None,
-                    sender_chat: None,
-                    author_signature: None,
-                }),
+                },
             }),
         };
 
