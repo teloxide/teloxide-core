@@ -227,6 +227,7 @@ pub enum ForwardedFrom {
 #[serde(untagged)]
 pub enum ForwardKind {
     Channel(ForwardChannel),
+    AnonAdmin(ForwardAnonAdmin),
     NonChannel(ForwardNonChannel),
     Origin(ForwardOrigin),
 }
@@ -241,6 +242,18 @@ pub struct ForwardChannel {
 
     #[serde(rename = "forward_from_message_id")]
     pub message_id: i32,
+
+    #[serde(rename = "forward_signature")]
+    pub signature: Option<String>,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct ForwardAnonAdmin {
+    #[serde(rename = "forward_date")]
+    pub date: i32,
+
+    #[serde(rename = "forward_from_chat")]
+    pub chat: Chat,
 
     #[serde(rename = "forward_signature")]
     pub signature: Option<String>,
@@ -485,10 +498,10 @@ mod getters {
     use crate::types::{
         self,
         message::{ForwardKind::NonChannel, MessageKind::*},
-        Chat, ForwardChannel, ForwardKind, ForwardNonChannel, ForwardOrigin, ForwardedFrom,
-        MediaAnimation, MediaAudio, MediaContact, MediaDocument, MediaGame, MediaKind,
-        MediaLocation, MediaPhoto, MediaPoll, MediaSticker, MediaText, MediaVenue, MediaVideo,
-        MediaVideoNote, MediaVoice, Message, MessageChannelChatCreated, MessageCommon,
+        Chat, ForwardAnonAdmin, ForwardChannel, ForwardKind, ForwardNonChannel, ForwardOrigin,
+        ForwardedFrom, MediaAnimation, MediaAudio, MediaContact, MediaDocument, MediaGame,
+        MediaKind, MediaLocation, MediaPhoto, MediaPoll, MediaSticker, MediaText, MediaVenue,
+        MediaVideo, MediaVideoNote, MediaVoice, Message, MessageChannelChatCreated, MessageCommon,
         MessageConnectedWebsite, MessageDeleteChatPhoto, MessageDice, MessageEntity,
         MessageGroupChatCreated, MessageInvoice, MessageLeftChatMember, MessageMigrate,
         MessageNewChatMembers, MessageNewChatPhoto, MessageNewChatTitle, MessagePassportData,
@@ -543,7 +556,9 @@ mod getters {
         pub fn forward_from_chat(&self) -> Option<&Chat> {
             match &self.kind {
                 Common(MessageCommon {
-                    forward_kind: ForwardKind::Channel(ForwardChannel { chat, .. }),
+                    forward_kind:
+                        ForwardKind::Channel(ForwardChannel { chat, .. })
+                        | ForwardKind::AnonAdmin(ForwardAnonAdmin { chat, .. }),
                     ..
                 }) => Some(chat),
                 _ => None,
@@ -573,11 +588,10 @@ mod getters {
         pub fn forward_date(&self) -> Option<&i32> {
             match &self.kind {
                 Common(MessageCommon {
-                    forward_kind: ForwardKind::Channel(ForwardChannel { date, .. }),
-                    ..
-                })
-                | Common(MessageCommon {
-                    forward_kind: ForwardKind::NonChannel(ForwardNonChannel { date, .. }),
+                    forward_kind:
+                        ForwardKind::Channel(ForwardChannel { date, .. })
+                        | ForwardKind::AnonAdmin(ForwardAnonAdmin { date, .. })
+                        | ForwardKind::NonChannel(ForwardNonChannel { date, .. }),
                     ..
                 }) => Some(date),
                 _ => None,
