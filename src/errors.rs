@@ -167,6 +167,22 @@ pub enum ApiError {
     #[serde(rename = "Bad Request: message is too long")]
     MessageIsTooLong,
 
+    /// Occurs when bot tries to edit a message with text size greater then
+    /// 4096 symbols.
+    ///
+    /// May happen in methods:
+    /// 1. [`EditMessage`]
+    /// 2. [`EditMessageInline`]
+    /// 3. [`EditMessageCaption`]
+    /// 4. [`EditMessageCaptionInline`]
+    ///
+    /// [`SendMessage`]: crate::payloads::SendMessage
+    /// [`SendMessageInline`]: crate::payloads::SendMessageInline
+    /// [`EditMessageCaption`]: crate::payloads::EditMessageCaption
+    /// [`EditMessageCaptionInline`]: crate::payloads::EditMessageCaptionInline
+    #[serde(rename = "Bad Request: MESSAGE_TOO_LONG")]
+    EditedMessageIsTooLong,
+
     /// Occurs when bot tries to send media group with more than 10 items.
     ///
     /// May happen in methods:
