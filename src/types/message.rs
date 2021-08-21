@@ -154,22 +154,31 @@ pub struct MessageMessageAutoDeleteTimerChanged {
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-pub struct MessageMigrate {
-    /// The group has been migrated to a supergroup with the specified
-    /// identifier. This number may be greater than 32 bits and some
-    /// programming languages may have difficulty/silent defects in
-    /// interpreting it. But it is smaller than 52 bits, so a signed 64 bit
-    /// integer or double-precision float type are safe for storing this
-    /// identifier.
-    pub migrate_to_chat_id: i64,
+#[serde(untagged)]
+pub enum MessageMigrate {
+    Both {
+        /// The group has been migrated to a supergroup with the specified
+        /// identifier. This number may be greater than 32 bits and some
+        /// programming languages may have difficulty/silent defects in
+        /// interpreting it. But it is smaller than 52 bits, so a signed 64 bit
+        /// integer or double-precision float type are safe for storing this
+        /// identifier.
+        migrate_to_chat_id: i64,
 
-    /// The supergroup has been migrated from a group with the specified
-    /// identifier. This number may be greater than 32 bits and some
-    /// programming languages may have difficulty/silent defects in
-    /// interpreting it. But it is smaller than 52 bits, so a signed 64 bit
-    /// integer or double-precision float type are safe for storing this
-    /// identifier.
-    pub migrate_from_chat_id: i64,
+        /// The supergroup has been migrated from a group with the specified
+        /// identifier. This number may be greater than 32 bits and some
+        /// programming languages may have difficulty/silent defects in
+        /// interpreting it. But it is smaller than 52 bits, so a signed 64 bit
+        /// integer or double-precision float type are safe for storing this
+        /// identifier.
+        migrate_from_chat_id: i64,
+    },
+    To {
+        migrate_to_chat_id: i64,
+    },
+    From {
+        migrate_from_chat_id: i64,
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -919,19 +928,27 @@ mod getters {
 
         pub fn migrate_to_chat_id(&self) -> Option<i64> {
             match &self.kind {
-                Migrate(MessageMigrate {
-                    migrate_to_chat_id, ..
-                }) => Some(*migrate_to_chat_id),
+                Migrate(
+                    MessageMigrate::Both {
+                        migrate_to_chat_id, ..
+                    }
+                    | MessageMigrate::To { migrate_to_chat_id },
+                ) => Some(*migrate_to_chat_id),
                 _ => None,
             }
         }
 
         pub fn migrate_from_chat_id(&self) -> Option<i64> {
             match &self.kind {
-                Migrate(MessageMigrate {
-                    migrate_from_chat_id,
-                    ..
-                }) => Some(*migrate_from_chat_id),
+                Migrate(
+                    MessageMigrate::Both {
+                        migrate_from_chat_id,
+                        ..
+                    }
+                    | MessageMigrate::From {
+                        migrate_from_chat_id,
+                    },
+                ) => Some(*migrate_from_chat_id),
                 _ => None,
             }
         }
