@@ -32,7 +32,7 @@ struct Response {
     result: Vec<Update>
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 struct Update {
     #[serde(rename = "update_id")]
     id: u32,
@@ -73,7 +73,7 @@ impl FieldReplacer {
 }
 
 fn main() {
-    let token = env::var("TOKEN").unwrap();
+    let token = env::var("TOKEN").expect("No token");
     let offset: u32 = read_option("offset").unwrap()
         .map_or(Ok(0), |s| s.parse()).unwrap();
 
@@ -82,18 +82,21 @@ fn main() {
         .call().unwrap();
     let resp: Response = resp.into_json().unwrap();
     
-    let shred = FieldReplacer::new("first_name", r#""\w*""#, r#""FIRST_NAME""#)
-        .chain("last_name", r#""\w*""#, r#""LAST_NAME""#)
+    let shred = FieldReplacer::new("first_name", r#"".*?""#, r#""FIRST_NAME""#)
+        .chain("last_name", r#"".*?""#, r#""LAST_NAME""#)
         .chain("id", r#"\-?[0-9]+"#, "123456")
-        .chain("username", r#""\w*""#, r#""USERNAME""#);
+        .chain("username", r#"".*?""#, r#""USERNAME""#)
+        .chain("title", r#"".*?""#, r#""TITLE""#)
+        .chain("file_id", r#"".*?""#, r#""FILE_ID""#)
+        .chain("file_unique_id", r#"".*?""#, r#""FILE_UNIQUE_ID""#)
+        .chain("text", r#"".*?""#, r#""TEXT""#);
 
     for upd in resp.result {
         fs::write("offset", &(upd.id + 1).to_string()).unwrap();
 
-        let raw = format!(
-            "#\n{}\n",
-            json::to_string(&upd).unwrap()
-        );
+        let upd_json = json::to_string(&upd).unwrap();
+        println!("{}", upd_json);
+        let raw = format!("# \n{}\n", upd_json);
         let safe = shred.apply(raw);
     
         fs::OpenOptions::new()
