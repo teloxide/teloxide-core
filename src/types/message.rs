@@ -1000,7 +1000,7 @@ impl Message {
             // There are "tg://openmessage?user_id={0}&message_id={1}" links, which are
             // supposed to open any chat, including private messages, but they
             // are only supported by some telegram clients (e.g. Plus Messenger,
-            // Telegram for Androud 4.9+).
+            // Telegram for Android 4.9+).
             return None;
         }
 
@@ -1010,7 +1010,7 @@ impl Message {
             Some(username) => format!("https://t.me/{0}/{1}/", username, self.id),
             // For private groups we produce "private" t.me/c links. These are only
             // accesible to the group members.
-            None => format!("https://t.me/c/{0}/{1}/", self.chat.id, self.id),
+            None => format!("https://t.me/c/{0}/{1}/", &self.chat.id.to_string()[4..], self.id),
         };
 
         // UNWRAP:
