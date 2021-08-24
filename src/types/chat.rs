@@ -78,7 +78,7 @@ pub struct ChatPrivate {
     /// A dummy field. Used to ensure that the `type` field is equal to
     /// `private`.
     #[serde(rename = "type")]
-    #[serde(deserialize_with = "assert_private_field")]
+    #[serde(with = "private_chat_type")]
     pub type_: (),
 
     /// A username, for private chats, supergroups and channels if
@@ -174,31 +174,40 @@ pub struct PublicChatSupergroup {
     pub location: Option<ChatLocation>,
 }
 
-struct PrivateChatKindVisitor;
+mod private_chat_type {
+    use serde::{
+        de::{Deserializer, Error, Unexpected, Visitor},
+        Serializer,
+    };
+    use std::fmt;
 
-impl<'de> serde::de::Visitor<'de> for PrivateChatKindVisitor {
-    type Value = ();
+    struct PrivateChatKindVisitor;
 
-    fn expecting(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, r#"field equal to "private""#)
-    }
+    impl<'de> Visitor<'de> for PrivateChatKindVisitor {
+        type Value = ();
 
-    fn visit_str<E: serde::de::Error>(self, v: &str) -> Result<Self::Value, E> {
-        match v {
-            "private" => Ok(()),
-            _ => Err(E::invalid_value(
-                serde::de::Unexpected::Str(v),
-                &r#""private""#,
-            )),
+        fn expecting(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            write!(f, r#"field equal to "private""#)
+        }
+
+        fn visit_str<E: Error>(self, v: &str) -> Result<Self::Value, E> {
+            match v {
+                "private" => Ok(()),
+                _ => Err(E::invalid_value(Unexpected::Str(v), &r#""private""#)),
+            }
         }
     }
-}
 
-fn assert_private_field<'de, D>(des: D) -> Result<(), D::Error>
-where
-    D: serde::Deserializer<'de>,
-{
-    des.deserialize_str(PrivateChatKindVisitor)
+    pub fn deserialize<'de, D>(des: D) -> Result<(), D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        des.deserialize_str(PrivateChatKindVisitor)
+    }
+
+    pub fn serialize<S: Serializer>(_: &(), ser: S) -> Result<S::Ok, S::Error> {
+        ser.serialize_str("private")
+    }
 }
 
 impl Chat {
