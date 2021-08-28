@@ -133,7 +133,7 @@ fn diff_null_aware(lhs: &Value, rhs: &Value) -> Vec<Diff> {
                     }
                 }
             }
-            if rhs.len() > 0 {
+            if !rhs.is_empty() {
                 diffs.extend(rhs.into_iter().map(|(k, v)| Diff {
                     path: Key(vec![KeyPiece::Object(k)]),
                     lhs: Null,
@@ -176,7 +176,7 @@ fn parse_updates() -> Result<(), Box<dyn std::error::Error>> {
             .and_then(json::to_value)
             .map_err(|err| {
                 stderr
-                    .set_color(&ColorSpec::new().set_fg(Some(Color::Red)))
+                    .set_color(ColorSpec::new().set_fg(Some(Color::Red)))
                     .unwrap();
                 if !comment.is_empty() {
                     writeln!(stderr, "{} [ERROR]", comment).unwrap();
@@ -189,7 +189,7 @@ fn parse_updates() -> Result<(), Box<dyn std::error::Error>> {
                 if !diffs.is_empty() {
                     if !comment.is_empty() {
                         stderr
-                            .set_color(&ColorSpec::new().set_fg(Some(Color::Red)))
+                            .set_color(ColorSpec::new().set_fg(Some(Color::Red)))
                             .unwrap();
                         writeln!(stderr, "{} [ERROR]", comment).unwrap();
                         stderr.reset().unwrap();
@@ -197,11 +197,11 @@ fn parse_updates() -> Result<(), Box<dyn std::error::Error>> {
                     for Diff { path, lhs, rhs } in diffs {
                         write!(stderr, "{} = ", path).unwrap();
                         stderr
-                            .set_color(&ColorSpec::new().set_fg(Some(Color::Red)))
+                            .set_color(ColorSpec::new().set_fg(Some(Color::Red)))
                             .unwrap();
                         write!(stderr, "{}/", lhs).unwrap();
                         stderr
-                            .set_color(&ColorSpec::new().set_fg(Some(Color::Green)))
+                            .set_color(ColorSpec::new().set_fg(Some(Color::Green)))
                             .unwrap();
                         writeln!(stderr, "{}", rhs).unwrap();
                         stderr.reset().unwrap();
@@ -209,7 +209,7 @@ fn parse_updates() -> Result<(), Box<dyn std::error::Error>> {
                     Err(())
                 } else {
                     stderr
-                        .set_color(&ColorSpec::new().set_dimmed(true))
+                        .set_color(ColorSpec::new().set_dimmed(true))
                         .unwrap();
                     writeln!(stderr, "{} [OK]", comment).unwrap();
                     stderr.reset().unwrap();
