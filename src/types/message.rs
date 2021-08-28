@@ -1012,7 +1012,7 @@ impl Message {
             // accesible to the group members.
             None => format!(
                 "https://t.me/c/{0}/{1}/",
-                &self.chat.id.to_string()[4..],
+                (-self.chat.id) - 1000000000000,
                 self.id
             ),
         };
