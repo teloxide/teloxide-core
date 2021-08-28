@@ -989,7 +989,7 @@ mod getters {
 impl Message {
     /// Produces a direct link to the message.
     ///
-    /// Note that for private groups the link will only be accesible for group
+    /// Note that for private groups the link will only be accessible for group
     /// members.
     ///
     /// Returns `None` for private chats (i.e.: DMs).
@@ -1006,10 +1006,10 @@ impl Message {
 
         let url = match self.chat.username() {
             // If it's public group (i.e. not DM, not private group), we can produce
-            // "normal" t.me link (accesible to everyone).
+            // "normal" t.me link (accessible to everyone).
             Some(username) => format!("https://t.me/{0}/{1}/", username, self.id),
             // For private groups we produce "private" t.me/c links. These are only
-            // accesible to the group members.
+            // accessible to the group members.
             None => format!(
                 "https://t.me/c/{0}/{1}/",
                 (-self.chat.id) - 1000000000000,
