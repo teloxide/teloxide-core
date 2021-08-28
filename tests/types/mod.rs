@@ -41,7 +41,6 @@ struct Diff {
 // default lhs == rhs will return false when
 // lhs = {key: null}
 // rhs = {}
-// Returns all mismatched keys (key = Vec of parts, joined with '.')
 fn diff_null_aware(lhs: &Value, rhs: &Value) -> Vec<Diff> {
     use Value::*;
 
@@ -152,8 +151,8 @@ fn diff_null_aware(lhs: &Value, rhs: &Value) -> Vec<Diff> {
 }
 
 #[test]
-fn parse_updates() {
-    let file = BufReader::new(fs::File::open("tests/types/updates").unwrap());
+fn parse_updates() -> Result<(), Box<dyn std::error::Error>> {
+    let file = BufReader::new(fs::File::open("tests/types/updates")?);
     let mut errs = 0u16;
 
     let mut stderr = StandardStream::stderr(termcolor::ColorChoice::Auto);
@@ -166,37 +165,36 @@ fn parse_updates() {
         const COMMENT_PREFIX: &str = "# ";
         if line.starts_with(COMMENT_PREFIX) {
             if line.len() > COMMENT_PREFIX.len() {
-                // writeln!(stderr, "{}", line).unwrap();
                 comment = line;
+            } else {
+                comment = String::new();
             }
             continue;
         }
-        let value: Value = json::from_str(&line).unwrap();
+        let value: Value = json::from_str(&line)?;
         let _ = json::from_value::<Update>(value.clone())
             .and_then(json::to_value)
             .map_err(|err| {
                 stderr
                     .set_color(&ColorSpec::new().set_fg(Some(Color::Red)))
                     .unwrap();
-                writeln!(stderr, "{} [ERROR]", comment).unwrap();
+                if !comment.is_empty() {
+                    writeln!(stderr, "{} [ERROR]", comment).unwrap();
+                }
                 writeln!(stderr, "{:?}", err).unwrap();
                 stderr.reset().unwrap();
             })
             .and_then(|ser| {
                 let diffs = diff_null_aware(&ser, &value);
                 if !diffs.is_empty() {
-                    stderr
-                        .set_color(&ColorSpec::new().set_fg(Some(Color::Red)))
-                        .unwrap();
-                    writeln!(stderr, "{} [ERROR]", comment).unwrap();
-                    stderr.reset().unwrap();
+                    if !comment.is_empty() {
+                        stderr
+                            .set_color(&ColorSpec::new().set_fg(Some(Color::Red)))
+                            .unwrap();
+                        writeln!(stderr, "{} [ERROR]", comment).unwrap();
+                        stderr.reset().unwrap();
+                    }
                     for Diff { path, lhs, rhs } in diffs {
-                        // println!(
-                        //     "{} = {}/{}",
-                        //     path,
-                        //     json::to_string_pretty(&lhs).unwrap(),
-                        //     json::to_string_pretty(&rhs).unwrap()
-                        // );
                         write!(stderr, "{} = ", path).unwrap();
                         stderr
                             .set_color(&ColorSpec::new().set_fg(Some(Color::Red)))
@@ -222,7 +220,9 @@ fn parse_updates() {
     }
 
     if errs > 0 {
-        stderr.flush().unwrap();
-        panic!("There were errors");
+        stderr.flush()?;
+        Err("There were errors".into())
+    } else {
+        Ok(())
     }
 }
