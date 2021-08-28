@@ -180,6 +180,8 @@ fn parse_updates() -> Result<(), Box<dyn std::error::Error>> {
                     .unwrap();
                 if !comment.is_empty() {
                     writeln!(stderr, "{} [ERROR]", comment).unwrap();
+                } else {
+                    writeln!(stderr, "[ERROR]").unwrap();
                 }
                 writeln!(stderr, "{:?}", err).unwrap();
                 stderr.reset().unwrap();
@@ -187,13 +189,15 @@ fn parse_updates() -> Result<(), Box<dyn std::error::Error>> {
             .and_then(|ser| {
                 let diffs = diff_null_aware(&ser, &value);
                 if !diffs.is_empty() {
+                    stderr
+                        .set_color(ColorSpec::new().set_fg(Some(Color::Red)))
+                        .unwrap();
                     if !comment.is_empty() {
-                        stderr
-                            .set_color(ColorSpec::new().set_fg(Some(Color::Red)))
-                            .unwrap();
                         writeln!(stderr, "{} [ERROR]", comment).unwrap();
-                        stderr.reset().unwrap();
+                    } else {
+                        writeln!(stderr, "[ERROR]").unwrap();
                     }
+                    stderr.reset().unwrap();
                     for Diff { path, lhs, rhs } in diffs {
                         write!(stderr, "{} = ", path).unwrap();
                         stderr
@@ -208,10 +212,12 @@ fn parse_updates() -> Result<(), Box<dyn std::error::Error>> {
                     }
                     Err(())
                 } else {
-                    stderr
-                        .set_color(ColorSpec::new().set_dimmed(true))
-                        .unwrap();
-                    writeln!(stderr, "{} [OK]", comment).unwrap();
+                    stderr.set_color(ColorSpec::new().set_dimmed(true)).unwrap();
+                    if !comment.is_empty() {
+                        writeln!(stderr, "{} [OK]", comment).unwrap();
+                    } else {
+                        writeln!(stderr, "[OK]").unwrap();
+                    }
                     stderr.reset().unwrap();
                     Ok(())
                 }
