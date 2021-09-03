@@ -121,10 +121,11 @@ pub struct MessageDeleteChatPhoto {
     pub delete_chat_photo: True,
 }
 
-#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct MessageGroupChatCreated {
     /// Service message: the group has been created.
     pub group_chat_created: True,
+    pub from: User,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
@@ -156,7 +157,7 @@ pub struct MessageMessageAutoDeleteTimerChanged {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum MessageMigrate {
-    Both {
+    To {
         /// The group has been migrated to a supergroup with the specified
         /// identifier. This number may be greater than 32 bits and some
         /// programming languages may have difficulty/silent defects in
@@ -164,7 +165,9 @@ pub enum MessageMigrate {
         /// integer or double-precision float type are safe for storing this
         /// identifier.
         migrate_to_chat_id: i64,
-
+        from: User,
+    },
+    From {
         /// The supergroup has been migrated from a group with the specified
         /// identifier. This number may be greater than 32 bits and some
         /// programming languages may have difficulty/silent defects in
@@ -172,12 +175,7 @@ pub enum MessageMigrate {
         /// integer or double-precision float type are safe for storing this
         /// identifier.
         migrate_from_chat_id: i64,
-    },
-    To {
-        migrate_to_chat_id: i64,
-    },
-    From {
-        migrate_from_chat_id: i64,
+        from: User,
     },
 }
 
@@ -901,9 +899,9 @@ mod getters {
 
         pub fn group_chat_created(&self) -> Option<True> {
             match &self.kind {
-                GroupChatCreated(MessageGroupChatCreated { group_chat_created }) => {
-                    Some(*group_chat_created)
-                }
+                GroupChatCreated(MessageGroupChatCreated {
+                    group_chat_created, ..
+                }) => Some(*group_chat_created),
                 _ => None,
             }
         }
@@ -928,27 +926,19 @@ mod getters {
 
         pub fn migrate_to_chat_id(&self) -> Option<i64> {
             match &self.kind {
-                Migrate(
-                    MessageMigrate::Both {
-                        migrate_to_chat_id, ..
-                    }
-                    | MessageMigrate::To { migrate_to_chat_id },
-                ) => Some(*migrate_to_chat_id),
+                Migrate(MessageMigrate::To {
+                    migrate_to_chat_id, ..
+                }) => Some(*migrate_to_chat_id),
                 _ => None,
             }
         }
 
         pub fn migrate_from_chat_id(&self) -> Option<i64> {
             match &self.kind {
-                Migrate(
-                    MessageMigrate::Both {
-                        migrate_from_chat_id,
-                        ..
-                    }
-                    | MessageMigrate::From {
-                        migrate_from_chat_id,
-                    },
-                ) => Some(*migrate_from_chat_id),
+                Migrate(MessageMigrate::From {
+                    migrate_from_chat_id,
+                    ..
+                }) => Some(*migrate_from_chat_id),
                 _ => None,
             }
         }

@@ -128,6 +128,9 @@ pub struct PublicChatGroup {
     ///
     /// [`GetChat`]: crate::payloads::GetChat
     pub permissions: Option<ChatPermissions>,
+
+    /// TODO: look into this. Looks like an undocumented field
+    pub all_members_are_administrators: bool,
 }
 
 #[serde_with_macros::skip_serializing_none]
@@ -297,7 +300,7 @@ impl Chat {
     /// [`GetChat`]: crate::payloads::GetChat
     pub fn permissions(&self) -> Option<ChatPermissions> {
         if let ChatKind::Public(this) = &self.kind {
-            if let PublicChatKind::Group(PublicChatGroup { permissions })
+            if let PublicChatKind::Group(PublicChatGroup { permissions, .. })
             | PublicChatKind::Supergroup(PublicChatSupergroup { permissions, .. }) = &this.kind
             {
                 return *permissions;
