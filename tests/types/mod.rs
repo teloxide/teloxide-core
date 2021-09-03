@@ -121,7 +121,10 @@ fn diff_null_aware(lhs: &Value, rhs: &Value) -> Vec<Diff> {
                     Some(vr) => {
                         let d = diff_null_aware(&vl, &vr);
                         if !d.is_empty() {
-                            diffs.extend(d);
+                            diffs.extend(d.into_iter().map(|mut d| {
+                                d.path.0.push(KeyPiece::Object(k.clone()));
+                                d
+                            }));
                         }
                     }
                     None => {
