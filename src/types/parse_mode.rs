@@ -139,6 +139,8 @@ pub enum ParseMode {
     #[deprecated = "This is a legacy mode, retained for backward compatibility. Use `MarkdownV2` \
                     instead."]
     Markdown,
+    /// disables parse mode
+    None,
 }
 
 impl TryFrom<&str> for ParseMode {
@@ -150,6 +152,7 @@ impl TryFrom<&str> for ParseMode {
             "html" => Ok(ParseMode::Html),
             "markdown" => Ok(ParseMode::Markdown),
             "markdownv2" => Ok(ParseMode::MarkdownV2),
+            "none" | "null" => Ok(ParseMode::None),
             _ => Err(()),
         }
     }
