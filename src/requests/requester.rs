@@ -419,6 +419,28 @@ pub trait Requester {
         C: Into<ChatId>,
         I: Into<String>;
 
+    type ApproveChatJoinRequest: Request<Payload = ApproveChatJoinRequest, Err = Self::Err>;
+
+    /// For Telegram documentation see [`ApproveChatJoinRequest`].
+    fn approve_chat_join_request<C>(
+        &self,
+        chat_id: C,
+        user_id: i64,
+    ) -> Self::ApproveChatJoinRequest
+    where
+        C: Into<ChatId>;
+
+    type DeclineChatJoinRequest: Request<Payload = DeclineChatJoinRequest, Err = Self::Err>;
+
+    /// For Telegram documentation see [`DeclineChatJoinRequest`].
+    fn decline_chat_join_request<C>(
+        &self,
+        chat_id: C,
+        user_id: i64,
+    ) -> Self::DeclineChatJoinRequest
+    where
+        C: Into<ChatId>;
+
     type SetChatPhoto: Request<Payload = SetChatPhoto, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetChatPhoto`].
