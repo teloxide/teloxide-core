@@ -10,6 +10,7 @@ pub enum ChatAction {
     RecordVoice,
     UploadVoice,
     UploadDocument,
+    ChooseSticker,
     FindLocation,
     RecordVideoNote,
     UploadVideoNote,
