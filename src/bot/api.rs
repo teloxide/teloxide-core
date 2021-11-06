@@ -469,6 +469,30 @@ impl Requester for Bot {
         )
     }
 
+    type ApproveChatJoinRequest = JsonRequest<payloads::ApproveChatJoinRequest>;
+
+    fn approve_chat_join_request<C>(&self, chat_id: C, user_id: i64) -> Self::ApproveChatJoinRequest
+    where
+        C: Into<ChatId>,
+    {
+        Self::ApproveChatJoinRequest::new(
+            self.clone(),
+            payloads::ApproveChatJoinRequest::new(chat_id, user_id),
+        )
+    }
+
+    type DeclineChatJoinRequest = JsonRequest<payloads::DeclineChatJoinRequest>;
+
+    fn decline_chat_join_request<C>(&self, chat_id: C, user_id: i64) -> Self::DeclineChatJoinRequest
+    where
+        C: Into<ChatId>,
+    {
+        Self::DeclineChatJoinRequest::new(
+            self.clone(),
+            payloads::DeclineChatJoinRequest::new(chat_id, user_id),
+        )
+    }
+
     type SetChatPhoto = MultipartRequest<payloads::SetChatPhoto>;
 
     fn set_chat_photo<C>(&self, chat_id: C, photo: InputFile) -> Self::SetChatPhoto
