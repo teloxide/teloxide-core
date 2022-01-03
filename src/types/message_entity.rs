@@ -63,6 +63,7 @@ pub enum MessageEntityKind {
     TextMention { user: User },
     Underline,
     Strikethrough,
+    Spoiler,
 }
 
 #[cfg(test)]
