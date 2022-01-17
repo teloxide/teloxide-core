@@ -18,7 +18,7 @@ impl_payload! {
     pub SendLocation (SendLocationSetters) => Message {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Latitude of the location
             pub latitude: f64,
             /// Longitude of the location
@@ -49,7 +49,7 @@ impl_payload! {
             ///
             /// [inline keyboard]: https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating
             /// [custom reply keyboard]: https://core.telegram.org/bots#keyboards
-            pub reply_markup: ReplyMarkup [into],
+            pub reply_markup: ReplyMarkup,
         }
     }
 }

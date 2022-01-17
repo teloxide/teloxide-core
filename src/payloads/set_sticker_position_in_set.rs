@@ -16,7 +16,7 @@ impl_payload! {
     pub SetStickerPositionInSet (SetStickerPositionInSetSetters) => True {
         required {
             /// File identifier of the sticker
-            pub sticker: String [into],
+            pub sticker: String,
             /// New sticker position in the set, zero-based
             pub position: u32,
         }

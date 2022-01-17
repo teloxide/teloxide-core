@@ -20,9 +20,9 @@ impl_payload! {
     pub EditMessageTextInline (EditMessageTextInlineSetters) => True {
         required {
             /// Identifier of the inline message
-            pub inline_message_id: String [into],
+            pub inline_message_id: String,
             /// New text of the message, 1-4096 characters after entities parsing
-            pub text: String [into],
+            pub text: String,
         }
         optional {
             /// Mode for parsing entities in the message text. See [formatting options] for more details.
@@ -30,7 +30,7 @@ impl_payload! {
             /// [formatting options]: https://core.telegram.org/bots/api#formatting-options
             pub parse_mode: ParseMode,
             /// List of special entities that appear in message text, which can be specified instead of _parse\_mode_
-            pub entities: Vec<MessageEntity> [collect],
+            pub entities: Vec<MessageEntity>,
             /// Disables link previews for links in this message
             pub disable_web_page_preview: bool,
             /// A JSON-serialized object for an [inline keyboard].

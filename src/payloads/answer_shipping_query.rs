@@ -18,15 +18,15 @@ impl_payload! {
     pub AnswerShippingQuery (AnswerShippingQuerySetters) => True {
         required {
             /// Unique identifier for the query to be answered
-            pub shipping_query_id: String [into],
+            pub shipping_query_id: String,
             /// Specify True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible)
             pub ok: bool,
         }
         optional {
             /// Required if ok is True. A JSON-serialized array of available shipping options.
-            pub shipping_options: Vec<ShippingOption> [collect],
+            pub shipping_options: Vec<ShippingOption>,
             /// Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. 'Sorry, delivery to your desired address is unavailable'). Telegram will display this message to the user.
-            pub error_message: String [into],
+            pub error_message: String,
         }
     }
 }

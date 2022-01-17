@@ -18,9 +18,9 @@ impl_payload! {
     pub SendMessage (SendMessageSetters) => Message {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Text of the message to be sent, 1-4096 characters after entities parsing
-            pub text: String [into],
+            pub text: String,
         }
         optional {
             /// Mode for parsing entities in the message text. See [formatting options] for more details.
@@ -28,7 +28,7 @@ impl_payload! {
             /// [formatting options]: https://core.telegram.org/bots/api#formatting-options
             pub parse_mode: ParseMode,
             /// List of special entities that appear in the message text, which can be specified instead of _parse\_mode_
-            pub entities: Vec<MessageEntity> [collect],
+            pub entities: Vec<MessageEntity>,
             /// Disables link previews for links in this message
             pub disable_web_page_preview: bool,
             /// Sends the message [silently]. Users will receive a notification with no sound.
@@ -45,7 +45,7 @@ impl_payload! {
             ///
             /// [inline keyboard]: https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating
             /// [custom reply keyboard]: https://core.telegram.org/bots#keyboards
-            pub reply_markup: ReplyMarkup [into],
+            pub reply_markup: ReplyMarkup,
         }
     }
 }

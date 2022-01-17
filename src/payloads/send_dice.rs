@@ -18,7 +18,7 @@ impl_payload! {
     pub SendDice (SendDiceSetters) => Message {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
         }
         optional {
             /// Emoji on which the dice throw animation is based. Currently, must be one of “🎲”, “🎯”, “🏀”, “⚽”, “🎳”, or “🎰”. Dice can have values 1-6 for “🎲”, “🎯” and “🎳”, values 1-5 for “🏀” and “⚽”, and values 1-64 for “🎰”. Defaults to “🎲”
@@ -37,7 +37,7 @@ impl_payload! {
             ///
             /// [inline keyboard]: https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating
             /// [custom reply keyboard]: https://core.telegram.org/bots#keyboards
-            pub reply_markup: ReplyMarkup [into],
+            pub reply_markup: ReplyMarkup,
         }
     }
 }

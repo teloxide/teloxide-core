@@ -18,19 +18,19 @@ impl_payload! {
     pub EditMessageCaption (EditMessageCaptionSetters) => Message {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`).
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Identifier of the message to edit
             pub message_id: i32,
         }
         optional {
             /// New caption of the message, 0-1024 characters after entities parsing
-            pub caption: String [into],
+            pub caption: String,
             /// Mode for parsing entities in the message text. See [formatting options] for more details.
             ///
             /// [formatting options]: https://core.telegram.org/bots/api#formatting-options
             pub parse_mode: ParseMode,
             /// List of special entities that appear in the caption, which can be specified instead of _parse\_mode_
-            pub caption_entities: Vec<MessageEntity> [collect],
+            pub caption_entities: Vec<MessageEntity>,
             /// A JSON-serialized object for an [inline keyboard].
             ///
             /// [inline keyboard]: https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating

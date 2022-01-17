@@ -18,7 +18,7 @@ impl_payload! {
     pub GetChatMember (GetChatMemberSetters) => ChatMember {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Unique identifier of the target user
             pub user_id: i64,
         }

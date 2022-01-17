@@ -19,16 +19,16 @@ impl_payload! {
     pub EditChatInviteLink (EditChatInviteLinkSetters) => String {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// The invite link to edit
-            pub invite_link: String [into],
+            pub invite_link: String,
         }
         optional {
             /// Invite link name; 0-32 characters
-            pub name: String [into],
+            pub name: String,
             /// Point in time (Unix timestamp) when the link will expire
             #[serde(with = "crate::types::serde_opt_date_from_unix_timestamp")]
-            pub expire_date: DateTime<Utc> [into],
+            pub expire_date: DateTime<Utc>,
             /// Maximum number of users that can be members of the chat simultaneously after joining the chat via this invite link; 1-99999
             pub member_limit: u32,
             /// True, if users joining the chat via the link need to be approved by chat administrators. If True, member_limit can't be specified

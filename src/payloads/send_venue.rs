@@ -18,27 +18,27 @@ impl_payload! {
     pub SendVenue (SendVenueSetters) => Message {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Latitude of new location
             pub latitude: f64,
             /// Longitude of new location
             pub longitude: f64,
             /// Name of the venue
-            pub title: String [into],
+            pub title: String,
             /// Address of the venue
-            pub address: String [into],
+            pub address: String,
         }
         optional {
             /// Foursquare identifier of the venue
-            pub foursquare_id: String [into],
+            pub foursquare_id: String,
             /// Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
-            pub foursquare_type: String [into],
+            pub foursquare_type: String,
             /// Google Places identifier of the venue
-            pub google_place_id: String [into],
+            pub google_place_id: String,
             /// Google Places type of the venue. (See [supported types].)
             ///
             /// [supported types]: https://developers.google.com/places/web-service/supported_types
-            pub google_place_type: String [into],
+            pub google_place_type: String,
             /// Sends the message [silently]. Users will receive a notification with no sound.
             ///
             /// [silently]: https://telegram.org/blog/channels-2-0#silent-messages
@@ -53,7 +53,7 @@ impl_payload! {
             ///
             /// [inline keyboard]: https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating
             /// [custom reply keyboard]: https://core.telegram.org/bots#keyboards
-            pub reply_markup: ReplyMarkup [into],
+            pub reply_markup: ReplyMarkup,
         }
     }
 }

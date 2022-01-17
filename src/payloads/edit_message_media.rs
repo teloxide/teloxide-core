@@ -18,7 +18,7 @@ impl_payload! {
     pub EditMessageMedia (EditMessageMediaSetters) => Message {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`).
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Identifier of the message to edit
             pub message_id: i32,
             /// A JSON-serialized object for a new media content of the message

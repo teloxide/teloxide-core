@@ -18,7 +18,7 @@ impl_payload! {
     pub EditMessageMediaInline (EditMessageMediaInlineSetters) => True {
         required {
             /// Identifier of the inline message
-            pub inline_message_id: String [into],
+            pub inline_message_id: String,
             /// A JSON-serialized object for a new media content of the message
             pub media: InputMedia,
         }

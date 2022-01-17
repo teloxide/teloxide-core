@@ -19,7 +19,7 @@ impl_payload! {
     pub GetFile (GetFileSetters) => File {
         required {
             /// File identifier to get info about
-            pub file_id: String [into],
+            pub file_id: String,
         }
     }
 }

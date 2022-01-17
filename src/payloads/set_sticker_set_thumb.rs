@@ -17,7 +17,7 @@ impl_payload! {
     pub SetStickerSetThumb (SetStickerSetThumbSetters) => True {
         required {
             /// Name of the sticker set
-            pub name: String [into],
+            pub name: String,
             /// User identifier of sticker file owner
             pub user_id: i64,
         }

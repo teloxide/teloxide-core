@@ -22,7 +22,7 @@ impl_payload! {
     pub SendAudio (SendAudioSetters) => Message {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. [More info on Sending Files »]
             ///
             /// [More info on Sending Files »]: crate::types::InputFile
@@ -30,19 +30,19 @@ impl_payload! {
         }
         optional {
             /// Audio caption, 0-1024 characters after entities parsing
-            pub caption: String [into],
+            pub caption: String,
             /// Mode for parsing entities in the audio caption. See [formatting options] for more details.
             ///
             /// [formatting options]: https://core.telegram.org/bots/api#formatting-options
             pub parse_mode: ParseMode,
             /// List of special entities that appear in the photo caption, which can be specified instead of _parse\_mode_
-            pub caption_entities: Vec<MessageEntity> [collect],
+            pub caption_entities: Vec<MessageEntity>,
             /// Duration of the audio in seconds
             pub duration: u32,
             /// Performer
-            pub performer: String [into],
+            pub performer: String,
             /// Track name
-            pub title: String [into],
+            pub title: String,
             /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. [More info on Sending Files »]
             ///
             /// [More info on Sending Files »]: crate::types::InputFile
@@ -61,7 +61,7 @@ impl_payload! {
             ///
             /// [inline keyboard]: https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating
             /// [custom reply keyboard]: https://core.telegram.org/bots#keyboards
-            pub reply_markup: ReplyMarkup [into],
+            pub reply_markup: ReplyMarkup,
         }
     }
 }

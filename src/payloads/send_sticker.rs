@@ -19,7 +19,7 @@ impl_payload! {
     pub SendSticker (SendStickerSetters) => Message {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`).
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Sticker to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. [More info on Sending Files »]
             ///
             /// [More info on Sending Files »]: crate::types::InputFile
@@ -40,7 +40,7 @@ impl_payload! {
             ///
             /// [inline keyboard]: https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating
             /// [custom reply keyboard]: https://core.telegram.org/bots#keyboards
-            pub reply_markup: ReplyMarkup [into],
+            pub reply_markup: ReplyMarkup,
         }
     }
 }

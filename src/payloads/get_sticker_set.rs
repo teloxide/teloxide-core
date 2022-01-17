@@ -16,7 +16,7 @@ impl_payload! {
     pub GetStickerSet (GetStickerSetSetters) => StickerSet {
         required {
             /// Name of the sticker set
-            pub name: String [into],
+            pub name: String,
         }
     }
 }

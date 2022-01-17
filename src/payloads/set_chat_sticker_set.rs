@@ -16,9 +16,9 @@ impl_payload! {
     pub SetChatStickerSet (SetChatStickerSetSetters) => True {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Name of the sticker set to be set as the group sticker set
-            pub sticker_set_name: String [into],
+            pub sticker_set_name: String,
         }
     }
 }

@@ -16,11 +16,11 @@ impl_payload! {
     pub SetChatDescription (SetChatDescriptionSetters) => True {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
         }
         optional {
             /// New chat description, 0-255 characters
-            pub description: String [into],
+            pub description: String,
         }
     }
 }

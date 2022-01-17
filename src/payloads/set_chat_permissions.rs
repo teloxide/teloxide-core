@@ -16,7 +16,7 @@ impl_payload! {
     pub SetChatPermissions (SetChatPermissionsSetters) => True {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// New default chat permissions
             pub permissions: ChatPermissions,
         }

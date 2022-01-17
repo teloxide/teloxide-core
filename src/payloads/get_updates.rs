@@ -32,7 +32,7 @@ impl_payload! {
             /// Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.
             ///
             /// [`Update`]: crate::types::Update
-            pub allowed_updates: Vec<AllowedUpdate> [collect],
+            pub allowed_updates: Vec<AllowedUpdate>,
         }
     }
 }

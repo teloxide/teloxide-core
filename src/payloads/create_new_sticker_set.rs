@@ -19,16 +19,16 @@ impl_payload! {
             /// User identifier of sticker file owner
             pub user_id: i64,
             /// Short name of sticker set, to be used in `t.me/addstickers/` URLs (e.g., _animals_). Can contain only english letters, digits and underscores. Must begin with a letter, can't contain consecutive underscores and must end in _“\_by\_<bot username>”. <bot\_username>_ is case insensitive. 1-64 characters.
-            pub name: String [into],
+            pub name: String,
             /// Sticker set title, 1-64 characters
-            pub title: String [into],
+            pub title: String,
             /// **PNG** or **TGS** image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. Pass a _file\_id_ as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. [More info on Sending Files »]
             ///
             /// [More info on Sending Files »]: crate::types::InputFile
             #[serde(flatten)]
             pub sticker: InputSticker,
             /// One or more emoji corresponding to the sticker
-            pub emojis: String [into],
+            pub emojis: String,
         }
         optional {
             /// Pass _True_, if a set of mask stickers should be created

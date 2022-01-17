@@ -19,14 +19,14 @@ impl_payload! {
             /// User identifier of sticker file owner
             pub user_id: i64,
             /// Sticker set name
-            pub name: String [into],
+            pub name: String,
             /// **PNG** or **TGS** image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. Pass a _file\_id_ as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. [More info on Sending Files »]
             ///
             /// [More info on Sending Files »]: crate::types::InputFile
             #[serde(flatten)]
             pub sticker: InputSticker,
             /// One or more emoji corresponding to the sticker
-            pub emojis: String [into],
+            pub emojis: String,
         }
         optional {
             /// A JSON-serialized object for position where the mask should be placed on faces

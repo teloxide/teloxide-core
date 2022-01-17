@@ -22,11 +22,11 @@ impl_payload! {
     pub AnswerCallbackQuery (AnswerCallbackQuerySetters) => True {
         required {
             /// Unique identifier for the query to be answered
-            pub callback_query_id: String [into],
+            pub callback_query_id: String,
         }
         optional {
             /// Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
-            pub text: String [into],
+            pub text: String,
             /// If true, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.
             pub show_alert: bool,
             /// URL that will be opened by the user's client. If you have created a [`Game`] and accepted the conditions via [@Botfather], specify the URL that opens your game — note that this will only work if the query comes from a _[callback\_game]_ button.

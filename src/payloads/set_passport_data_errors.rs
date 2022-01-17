@@ -20,7 +20,7 @@ impl_payload! {
             /// User identifier
             pub user_id: i64,
             /// A JSON-serialized array describing the errors
-            pub errors: Vec<PassportElementError> [collect],
+            pub errors: Vec<PassportElementError>,
         }
     }
 }

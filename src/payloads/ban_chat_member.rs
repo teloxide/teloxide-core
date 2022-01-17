@@ -19,14 +19,14 @@ impl_payload! {
     pub BanChatMember (BanChatMemberSetters) => True {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Unique identifier of the target user
             pub user_id: i64,
         }
         optional {
             /// Date when the user will be unbanned, unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever
             #[serde(with = "crate::types::serde_opt_date_from_unix_timestamp")]
-            pub until_date: DateTime<Utc> [into],
+            pub until_date: DateTime<Utc>,
             /// Pass True to delete all messages from the chat for the user that is being removed. If False, the user will be able to see messages in the group that were sent before the user was removed. Always True for supergroups and channels.
             pub revoke_messages: bool,
         }

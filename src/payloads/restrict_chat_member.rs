@@ -17,7 +17,7 @@ impl_payload! {
     pub RestrictChatMember (RestrictChatMemberSetters) => True {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Unique identifier of the target user
             pub user_id: i64,
             /// A JSON-serialized object for new user permissions
@@ -26,7 +26,7 @@ impl_payload! {
         optional {
             /// Date when the user will be unbanned, unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever
             #[serde(with = "crate::types::serde_opt_date_from_unix_timestamp")]
-            pub until_date: DateTime<Utc> [into],
+            pub until_date: DateTime<Utc>,
         }
     }
 }

@@ -499,179 +499,169 @@ macro_rules! requester_forward {
     (@method send_message $body:ident $ty:ident) => {
         type SendMessage = $ty![SendMessage];
 
-        fn send_message<C, T>(&self, chat_id: C, text: T) -> Self::SendMessage where C: Into<ChatId>,
-        T: Into<String> {
+        fn send_message(&self, chat_id: ChatId, text: String) -> Self::SendMessage {
             let this = self;
-            $body!(send_message this (chat_id: C, text: T))
+            $body!(send_message this (chat_id: ChatId, text: String))
         }
     };
     (@method forward_message $body:ident $ty:ident) => {
         type ForwardMessage = $ty![ForwardMessage];
 
-        fn forward_message<C, F>(&self, chat_id: C, from_chat_id: F, message_id: i32) -> Self::ForwardMessage where C: Into<ChatId>,
-        F: Into<ChatId> {
+        fn forward_message(&self, chat_id: ChatId, from_chat_id: ChatId, message_id: i32) -> Self::ForwardMessage {
             let this = self;
-            $body!(forward_message this (chat_id: C, from_chat_id: F, message_id: i32))
+            $body!(forward_message this (chat_id: ChatId, from_chat_id: ChatId, message_id: i32))
         }
     };
     (@method copy_message $body:ident $ty:ident) => {
         type CopyMessage = $ty![CopyMessage];
 
-        fn copy_message<C, F>(&self, chat_id: C, from_chat_id: F, message_id: i32) -> Self::CopyMessage where C: Into<ChatId>,
-        F: Into<ChatId> {
+        fn copy_message(&self, chat_id: ChatId, from_chat_id: ChatId, message_id: i32) -> Self::CopyMessage {
             let this = self;
-            $body!(copy_message this (chat_id: C, from_chat_id: F, message_id: i32))
+            $body!(copy_message this (chat_id: ChatId, from_chat_id: ChatId, message_id: i32))
         }
     };
     (@method send_photo $body:ident $ty:ident) => {
         type SendPhoto = $ty![SendPhoto];
 
-        fn send_photo<C>(&self, chat_id: C, photo: InputFile) -> Self::SendPhoto where C: Into<ChatId> {
+        fn send_photo(&self, chat_id: ChatId, photo: InputFile) -> Self::SendPhoto {
             let this = self;
-            $body!(send_photo this (chat_id: C, photo: InputFile))
+            $body!(send_photo this (chat_id: ChatId, photo: InputFile))
         }
     };
     (@method send_audio $body:ident $ty:ident) => {
         type SendAudio = $ty![SendAudio];
 
-        fn send_audio<C>(&self, chat_id: C, audio: InputFile) -> Self::SendAudio where C: Into<ChatId> {
+        fn send_audio(&self, chat_id: ChatId, audio: InputFile) -> Self::SendAudio {
             let this = self;
-            $body!(send_audio this (chat_id: C, audio: InputFile))
+            $body!(send_audio this (chat_id: ChatId, audio: InputFile))
         }
     };
     (@method send_document $body:ident $ty:ident) => {
         type SendDocument = $ty![SendDocument];
 
-        fn send_document<C>(&self, chat_id: C, document: InputFile) -> Self::SendDocument where C: Into<ChatId> {
+        fn send_document(&self, chat_id: ChatId, document: InputFile) -> Self::SendDocument {
             let this = self;
-            $body!(send_document this (chat_id: C, document: InputFile))
+            $body!(send_document this (chat_id: ChatId, document: InputFile))
         }
     };
     (@method send_video $body:ident $ty:ident) => {
         type SendVideo = $ty![SendVideo];
 
-        fn send_video<C>(&self, chat_id: C, video: InputFile) -> Self::SendVideo where C: Into<ChatId> {
+        fn send_video(&self, chat_id: ChatId, video: InputFile) -> Self::SendVideo {
             let this = self;
-            $body!(send_video this (chat_id: C, video: InputFile))
+            $body!(send_video this (chat_id: ChatId, video: InputFile))
         }
     };
     (@method send_animation $body:ident $ty:ident) => {
         type SendAnimation = $ty![SendAnimation];
 
-        fn send_animation<C>(&self, chat_id: C, animation: InputFile) -> Self::SendAnimation where C: Into<ChatId> {
+        fn send_animation(&self, chat_id: ChatId, animation: InputFile) -> Self::SendAnimation {
             let this = self;
-            $body!(send_animation this (chat_id: C, animation: InputFile))
+            $body!(send_animation this (chat_id: ChatId, animation: InputFile))
         }
     };
     (@method send_voice $body:ident $ty:ident) => {
         type SendVoice = $ty![SendVoice];
 
-        fn send_voice<C>(&self, chat_id: C, voice: InputFile) -> Self::SendVoice where C: Into<ChatId> {
+        fn send_voice(&self, chat_id: ChatId, voice: InputFile) -> Self::SendVoice {
             let this = self;
-            $body!(send_voice this (chat_id: C, voice: InputFile))
+            $body!(send_voice this (chat_id: ChatId, voice: InputFile))
         }
     };
     (@method send_video_note $body:ident $ty:ident) => {
         type SendVideoNote = $ty![SendVideoNote];
 
-        fn send_video_note<C>(&self, chat_id: C, video_note: InputFile) -> Self::SendVideoNote where C: Into<ChatId> {
+        fn send_video_note(&self, chat_id: ChatId, video_note: InputFile) -> Self::SendVideoNote {
             let this = self;
-            $body!(send_video_note this (chat_id: C, video_note: InputFile))
+            $body!(send_video_note this (chat_id: ChatId, video_note: InputFile))
         }
     };
     (@method send_media_group $body:ident $ty:ident) => {
         type SendMediaGroup = $ty![SendMediaGroup];
 
-        fn send_media_group<C, M>(&self, chat_id: C, media: M) -> Self::SendMediaGroup where C: Into<ChatId>,
-        M: IntoIterator<Item = InputMedia> {
+        fn send_media_group(&self, chat_id: ChatId, media: Vec<InputMedia>) -> Self::SendMediaGroup {
             let this = self;
-            $body!(send_media_group this (chat_id: C, media: M))
+            $body!(send_media_group this (chat_id: ChatId, media: Vec<InputMedia>))
         }
     };
     (@method send_location $body:ident $ty:ident) => {
         type SendLocation = $ty![SendLocation];
 
-        fn send_location<C>(&self, chat_id: C, latitude: f64, longitude: f64) -> Self::SendLocation where C: Into<ChatId> {
+        fn send_location(&self, chat_id: ChatId, latitude: f64, longitude: f64) -> Self::SendLocation {
             let this = self;
-            $body!(send_location this (chat_id: C, latitude: f64, longitude: f64))
+            $body!(send_location this (chat_id: ChatId, latitude: f64, longitude: f64))
         }
     };
     (@method edit_message_live_location $body:ident $ty:ident) => {
         type EditMessageLiveLocation = $ty![EditMessageLiveLocation];
 
-        fn edit_message_live_location<C>(&self, chat_id: C, message_id: i32, latitude: f64, longitude: f64) -> Self::EditMessageLiveLocation where C: Into<ChatId> {
+        fn edit_message_live_location(&self, chat_id: ChatId, message_id: i32, latitude: f64, longitude: f64) -> Self::EditMessageLiveLocation {
             let this = self;
-            $body!(edit_message_live_location this (chat_id: C, message_id: i32, latitude: f64, longitude: f64))
+            $body!(edit_message_live_location this (chat_id: ChatId, message_id: i32, latitude: f64, longitude: f64))
         }
     };
     (@method edit_message_live_location_inline $body:ident $ty:ident) => {
         type EditMessageLiveLocationInline = $ty![EditMessageLiveLocationInline];
 
-        fn edit_message_live_location_inline<I>(&self, inline_message_id: I, latitude: f64, longitude: f64) -> Self::EditMessageLiveLocationInline where I: Into<String> {
+        fn edit_message_live_location_inline(&self, inline_message_id: String, latitude: f64, longitude: f64) -> Self::EditMessageLiveLocationInline {
             let this = self;
-            $body!(edit_message_live_location_inline this (inline_message_id: I, latitude: f64, longitude: f64))
+            $body!(edit_message_live_location_inline this (inline_message_id: String, latitude: f64, longitude: f64))
         }
     };
     (@method stop_message_live_location $body:ident $ty:ident) => {
         type StopMessageLiveLocation = $ty![StopMessageLiveLocation];
 
-        fn stop_message_live_location<C>(&self, chat_id: C, message_id: i32, latitude: f64, longitude: f64) -> Self::StopMessageLiveLocation where C: Into<ChatId> {
+        fn stop_message_live_location(&self, chat_id: ChatId, message_id: i32, latitude: f64, longitude: f64) -> Self::StopMessageLiveLocation {
             let this = self;
-            $body!(stop_message_live_location this (chat_id: C, message_id: i32, latitude: f64, longitude: f64))
+            $body!(stop_message_live_location this (chat_id: ChatId, message_id: i32, latitude: f64, longitude: f64))
         }
     };
     (@method stop_message_live_location_inline $body:ident $ty:ident) => {
         type StopMessageLiveLocationInline = $ty![StopMessageLiveLocationInline];
 
-        fn stop_message_live_location_inline<I>(&self, inline_message_id: I, latitude: f64, longitude: f64) -> Self::StopMessageLiveLocationInline where I: Into<String> {
+        fn stop_message_live_location_inline(&self, inline_message_id: String, latitude: f64, longitude: f64) -> Self::StopMessageLiveLocationInline {
             let this = self;
-            $body!(stop_message_live_location_inline this (inline_message_id: I, latitude: f64, longitude: f64))
+            $body!(stop_message_live_location_inline this (inline_message_id: String, latitude: f64, longitude: f64))
         }
     };
     (@method send_venue $body:ident $ty:ident) => {
         type SendVenue = $ty![SendVenue];
 
-        fn send_venue<C, T, A>(&self, chat_id: C, latitude: f64, longitude: f64, title: T, address: A) -> Self::SendVenue where C: Into<ChatId>,
-        T: Into<String>,
-        A: Into<String> {
+        fn send_venue(&self, chat_id: ChatId, latitude: f64, longitude: f64, title: String, address: String) -> Self::SendVenue {
             let this = self;
-            $body!(send_venue this (chat_id: C, latitude: f64, longitude: f64, title: T, address: A))
+            $body!(send_venue this (chat_id: ChatId, latitude: f64, longitude: f64, title: String, address: String))
         }
     };
     (@method send_contact $body:ident $ty:ident) => {
         type SendContact = $ty![SendContact];
 
-        fn send_contact<C, P, F>(&self, chat_id: C, phone_number: P, first_name: F) -> Self::SendContact where C: Into<ChatId>,
-        P: Into<String>,
-        F: Into<String> {
+        fn send_contact(&self, chat_id: ChatId, phone_number: String, first_name: String) -> Self::SendContact {
             let this = self;
-            $body!(send_contact this (chat_id: C, phone_number: P, first_name: F))
+            $body!(send_contact this (chat_id: ChatId, phone_number: String, first_name: String))
         }
     };
     (@method send_poll $body:ident $ty:ident) => {
         type SendPoll = $ty![SendPoll];
 
-        fn send_poll<C, Q, O>(&self, chat_id: C, question: Q, options: O) -> Self::SendPoll where C: Into<ChatId>,
-        Q: Into<String>,
-        O: IntoIterator<Item = String> {
+        fn send_poll(&self, chat_id: ChatId, question: String, options: Vec<String>) -> Self::SendPoll {
             let this = self;
-            $body!(send_poll this (chat_id: C, question: Q, options: O))
+            $body!(send_poll this (chat_id: ChatId, question: String, options: Vec<String>))
         }
     };
     (@method send_dice $body:ident $ty:ident) => {
         type SendDice = $ty![SendDice];
 
-        fn send_dice<C>(&self, chat_id: C) -> Self::SendDice where C: Into<ChatId> {
+        fn send_dice(&self, chat_id: ChatId) -> Self::SendDice {
             let this = self;
-            $body!(send_dice this (chat_id: C))
+            $body!(send_dice this (chat_id: ChatId))
         }
     };
     (@method send_chat_action $body:ident $ty:ident) => {
         type SendChatAction = $ty![SendChatAction];
 
-        fn send_chat_action<C>(&self, chat_id: C, action: ChatAction) -> Self::SendChatAction where C: Into<ChatId> {
+        fn send_chat_action(&self, chat_id: ChatId, action: ChatAction) -> Self::SendChatAction {
             let this = self;
-            $body!(send_chat_action this (chat_id: C, action: ChatAction))
+            $body!(send_chat_action this (chat_id: ChatId, action: ChatAction))
         }
     };
     (@method get_user_profile_photos $body:ident $ty:ident) => {
@@ -685,270 +675,265 @@ macro_rules! requester_forward {
     (@method get_file $body:ident $ty:ident) => {
         type GetFile = $ty![GetFile];
 
-        fn get_file<F>(&self, file_id: F) -> Self::GetFile where F: Into<String> {
+        fn get_file(&self, file_id: String) -> Self::GetFile {
             let this = self;
-            $body!(get_file this (file_id: F))
+            $body!(get_file this (file_id: String))
         }
     };
     (@method ban_chat_member $body:ident $ty:ident) => {
         type BanChatMember = $ty![BanChatMember];
 
-        fn ban_chat_member<C>(&self, chat_id: C, user_id: i64) -> Self::BanChatMember where C: Into<ChatId> {
+        fn ban_chat_member(&self, chat_id: ChatId, user_id: i64) -> Self::BanChatMember {
             let this = self;
-            $body!(ban_chat_member this (chat_id: C, user_id: i64))
+            $body!(ban_chat_member this (chat_id: ChatId, user_id: i64))
         }
     };
     (@method kick_chat_member $body:ident $ty:ident) => {
         type KickChatMember = $ty![KickChatMember];
 
-        fn kick_chat_member<C>(&self, chat_id: C, user_id: i64) -> Self::KickChatMember where C: Into<ChatId> {
+        fn kick_chat_member(&self, chat_id: ChatId, user_id: i64) -> Self::KickChatMember {
             let this = self;
-            $body!(kick_chat_member this (chat_id: C, user_id: i64))
+            $body!(kick_chat_member this (chat_id: ChatId, user_id: i64))
         }
     };
     (@method unban_chat_member $body:ident $ty:ident) => {
         type UnbanChatMember = $ty![UnbanChatMember];
 
-        fn unban_chat_member<C>(&self, chat_id: C, user_id: i64) -> Self::UnbanChatMember where C: Into<ChatId> {
+        fn unban_chat_member(&self, chat_id: ChatId, user_id: i64) -> Self::UnbanChatMember {
             let this = self;
-            $body!(unban_chat_member this (chat_id: C, user_id: i64))
+            $body!(unban_chat_member this (chat_id: ChatId, user_id: i64))
         }
     };
     (@method restrict_chat_member $body:ident $ty:ident) => {
         type RestrictChatMember = $ty![RestrictChatMember];
 
-        fn restrict_chat_member<C>(&self, chat_id: C, user_id: i64, permissions: ChatPermissions) -> Self::RestrictChatMember where C: Into<ChatId> {
+        fn restrict_chat_member(&self, chat_id: ChatId, user_id: i64, permissions: ChatPermissions) -> Self::RestrictChatMember {
             let this = self;
-            $body!(restrict_chat_member this (chat_id: C, user_id: i64, permissions: ChatPermissions))
+            $body!(restrict_chat_member this (chat_id: ChatId, user_id: i64, permissions: ChatPermissions))
         }
     };
     (@method promote_chat_member $body:ident $ty:ident) => {
         type PromoteChatMember = $ty![PromoteChatMember];
 
-        fn promote_chat_member<C>(&self, chat_id: C, user_id: i64) -> Self::PromoteChatMember where C: Into<ChatId> {
+        fn promote_chat_member(&self, chat_id: ChatId, user_id: i64) -> Self::PromoteChatMember {
             let this = self;
-            $body!(promote_chat_member this (chat_id: C, user_id: i64))
+            $body!(promote_chat_member this (chat_id: ChatId, user_id: i64))
         }
     };
     (@method set_chat_administrator_custom_title $body:ident $ty:ident) => {
         type SetChatAdministratorCustomTitle = $ty![SetChatAdministratorCustomTitle];
 
-        fn set_chat_administrator_custom_title<Ch, Cu>(&self, chat_id: Ch, user_id: i64, custom_title: Cu) -> Self::SetChatAdministratorCustomTitle where Ch: Into<ChatId>,
-        Cu: Into<String> {
+        fn set_chat_administrator_custom_title(&self, chat_id: ChatId, user_id: i64, custom_title: String) -> Self::SetChatAdministratorCustomTitle {
             let this = self;
-            $body!(set_chat_administrator_custom_title this (chat_id: Ch, user_id: i64, custom_title: Cu))
+            $body!(set_chat_administrator_custom_title this (chat_id: ChatId, user_id: i64, custom_title: String))
         }
     };
     (@method ban_chat_sender_chat $body:ident $ty:ident) => {
         type BanChatSenderChat = $ty![BanChatSenderChat];
 
-        fn ban_chat_sender_chat<C>(&self, chat_id: C, sender_chat_id: i64) -> Self::BanChatSenderChat where C: Into<ChatId> {
+        fn ban_chat_sender_chat(&self, chat_id: ChatId, sender_chat_id: i64) -> Self::BanChatSenderChat {
             let this = self;
-            $body!(ban_chat_sender_chat this (chat_id: C, sender_chat_id: i64))
+            $body!(ban_chat_sender_chat this (chat_id: ChatId, sender_chat_id: i64))
         }
     };
     (@method unban_chat_sender_chat $body:ident $ty:ident) => {
         type UnbanChatSenderChat = $ty![UnbanChatSenderChat];
 
-        fn unban_chat_sender_chat<C>(&self, chat_id: C, sender_chat_id: i64) -> Self::UnbanChatSenderChat where C: Into<ChatId> {
+        fn unban_chat_sender_chat(&self, chat_id: ChatId, sender_chat_id: i64) -> Self::UnbanChatSenderChat {
             let this = self;
-            $body!(unban_chat_sender_chat this (chat_id: C, sender_chat_id: i64))
+            $body!(unban_chat_sender_chat this (chat_id: ChatId, sender_chat_id: i64))
         }
     };
     (@method set_chat_permissions $body:ident $ty:ident) => {
         type SetChatPermissions = $ty![SetChatPermissions];
 
-        fn set_chat_permissions<C>(&self, chat_id: C, permissions: ChatPermissions) -> Self::SetChatPermissions where C: Into<ChatId> {
+        fn set_chat_permissions(&self, chat_id: ChatId, permissions: ChatPermissions) -> Self::SetChatPermissions {
             let this = self;
-            $body!(set_chat_permissions this (chat_id: C, permissions: ChatPermissions))
+            $body!(set_chat_permissions this (chat_id: ChatId, permissions: ChatPermissions))
         }
     };
     (@method export_chat_invite_link $body:ident $ty:ident) => {
         type ExportChatInviteLink = $ty![ExportChatInviteLink];
 
-        fn export_chat_invite_link<C>(&self, chat_id: C) -> Self::ExportChatInviteLink where C: Into<ChatId> {
+        fn export_chat_invite_link(&self, chat_id: ChatId) -> Self::ExportChatInviteLink {
             let this = self;
-            $body!(export_chat_invite_link this (chat_id: C))
+            $body!(export_chat_invite_link this (chat_id: ChatId))
         }
     };
     (@method create_chat_invite_link $body:ident $ty:ident) => {
         type CreateChatInviteLink = $ty![CreateChatInviteLink];
 
-        fn create_chat_invite_link<C>(&self, chat_id: C) -> Self::CreateChatInviteLink where C: Into<ChatId> {
+        fn create_chat_invite_link(&self, chat_id: ChatId) -> Self::CreateChatInviteLink {
             let this = self;
-            $body!(create_chat_invite_link this (chat_id: C))
+            $body!(create_chat_invite_link this (chat_id: ChatId))
         }
     };
     (@method edit_chat_invite_link $body:ident $ty:ident) => {
         type EditChatInviteLink = $ty![EditChatInviteLink];
 
-        fn edit_chat_invite_link<C, I>(&self, chat_id: C, invite_link: I) -> Self::EditChatInviteLink where C: Into<ChatId>,
-        I: Into<String> {
+        fn edit_chat_invite_link(&self, chat_id: ChatId, invite_link: String) -> Self::EditChatInviteLink {
             let this = self;
-            $body!(edit_chat_invite_link this (chat_id: C, invite_link: I))
+            $body!(edit_chat_invite_link this (chat_id: ChatId, invite_link: String))
         }
     };
     (@method revoke_chat_invite_link $body:ident $ty:ident) => {
         type RevokeChatInviteLink = $ty![RevokeChatInviteLink];
 
-        fn revoke_chat_invite_link<C, I>(&self, chat_id: C, invite_link: I) -> Self::RevokeChatInviteLink where C: Into<ChatId>,
-        I: Into<String> {
+        fn revoke_chat_invite_link(&self, chat_id: ChatId, invite_link: String) -> Self::RevokeChatInviteLink {
             let this = self;
-            $body!(revoke_chat_invite_link this (chat_id: C, invite_link: I))
+            $body!(revoke_chat_invite_link this (chat_id: ChatId, invite_link: String))
         }
     };
     (@method approve_chat_join_request $body:ident $ty:ident) => {
         type ApproveChatJoinRequest = $ty![ApproveChatJoinRequest];
 
-        fn approve_chat_join_request<C>(&self, chat_id: C, user_id: i64) -> Self::ApproveChatJoinRequest where C: Into<ChatId> {
+        fn approve_chat_join_request(&self, chat_id: ChatId, user_id: i64) -> Self::ApproveChatJoinRequest {
             let this = self;
-            $body!(approve_chat_join_request this (chat_id: C, user_id: i64))
+            $body!(approve_chat_join_request this (chat_id: ChatId, user_id: i64))
         }
     };
     (@method decline_chat_join_request $body:ident $ty:ident) => {
         type DeclineChatJoinRequest = $ty![DeclineChatJoinRequest];
 
-        fn decline_chat_join_request<C>(&self, chat_id: C, user_id: i64) -> Self::DeclineChatJoinRequest where C: Into<ChatId> {
+        fn decline_chat_join_request(&self, chat_id: ChatId, user_id: i64) -> Self::DeclineChatJoinRequest {
             let this = self;
-            $body!(decline_chat_join_request this (chat_id: C, user_id: i64))
+            $body!(decline_chat_join_request this (chat_id: ChatId, user_id: i64))
         }
     };
     (@method set_chat_photo $body:ident $ty:ident) => {
         type SetChatPhoto = $ty![SetChatPhoto];
 
-        fn set_chat_photo<C>(&self, chat_id: C, photo: InputFile) -> Self::SetChatPhoto where C: Into<ChatId> {
+        fn set_chat_photo(&self, chat_id: ChatId, photo: InputFile) -> Self::SetChatPhoto {
             let this = self;
-            $body!(set_chat_photo this (chat_id: C, photo: InputFile))
+            $body!(set_chat_photo this (chat_id: ChatId, photo: InputFile))
         }
     };
     (@method delete_chat_photo $body:ident $ty:ident) => {
         type DeleteChatPhoto = $ty![DeleteChatPhoto];
 
-        fn delete_chat_photo<C>(&self, chat_id: C) -> Self::DeleteChatPhoto where C: Into<ChatId> {
+        fn delete_chat_photo(&self, chat_id: ChatId) -> Self::DeleteChatPhoto {
             let this = self;
-            $body!(delete_chat_photo this (chat_id: C))
+            $body!(delete_chat_photo this (chat_id: ChatId))
         }
     };
     (@method set_chat_title $body:ident $ty:ident) => {
         type SetChatTitle = $ty![SetChatTitle];
 
-        fn set_chat_title<C, T>(&self, chat_id: C, title: T) -> Self::SetChatTitle where C: Into<ChatId>,
-        T: Into<String> {
+        fn set_chat_title(&self, chat_id: ChatId, title: String) -> Self::SetChatTitle {
             let this = self;
-            $body!(set_chat_title this (chat_id: C, title: T))
+            $body!(set_chat_title this (chat_id: ChatId, title: String))
         }
     };
     (@method set_chat_description $body:ident $ty:ident) => {
         type SetChatDescription = $ty![SetChatDescription];
 
-        fn set_chat_description<C>(&self, chat_id: C) -> Self::SetChatDescription where C: Into<ChatId> {
+        fn set_chat_description(&self, chat_id: ChatId) -> Self::SetChatDescription {
             let this = self;
-            $body!(set_chat_description this (chat_id: C))
+            $body!(set_chat_description this (chat_id: ChatId))
         }
     };
     (@method pin_chat_message $body:ident $ty:ident) => {
         type PinChatMessage = $ty![PinChatMessage];
 
-        fn pin_chat_message<C>(&self, chat_id: C, message_id: i32) -> Self::PinChatMessage where C: Into<ChatId> {
+        fn pin_chat_message(&self, chat_id: ChatId, message_id: i32) -> Self::PinChatMessage {
             let this = self;
-            $body!(pin_chat_message this (chat_id: C, message_id: i32))
+            $body!(pin_chat_message this (chat_id: ChatId, message_id: i32))
         }
     };
     (@method unpin_chat_message $body:ident $ty:ident) => {
         type UnpinChatMessage = $ty![UnpinChatMessage];
 
-        fn unpin_chat_message<C>(&self, chat_id: C) -> Self::UnpinChatMessage where C: Into<ChatId> {
+        fn unpin_chat_message(&self, chat_id: ChatId) -> Self::UnpinChatMessage {
             let this = self;
-            $body!(unpin_chat_message this (chat_id: C))
+            $body!(unpin_chat_message this (chat_id: ChatId))
         }
     };
     (@method unpin_all_chat_messages $body:ident $ty:ident) => {
         type UnpinAllChatMessages = $ty![UnpinAllChatMessages];
 
-        fn unpin_all_chat_messages<C>(&self, chat_id: C) -> Self::UnpinAllChatMessages where C: Into<ChatId> {
+        fn unpin_all_chat_messages(&self, chat_id: ChatId) -> Self::UnpinAllChatMessages {
             let this = self;
-            $body!(unpin_all_chat_messages this (chat_id: C))
+            $body!(unpin_all_chat_messages this (chat_id: ChatId))
         }
     };
     (@method leave_chat $body:ident $ty:ident) => {
         type LeaveChat = $ty![LeaveChat];
 
-        fn leave_chat<C>(&self, chat_id: C) -> Self::LeaveChat where C: Into<ChatId> {
+        fn leave_chat(&self, chat_id: ChatId) -> Self::LeaveChat {
             let this = self;
-            $body!(leave_chat this (chat_id: C))
+            $body!(leave_chat this (chat_id: ChatId))
         }
     };
     (@method get_chat $body:ident $ty:ident) => {
         type GetChat = $ty![GetChat];
 
-        fn get_chat<C>(&self, chat_id: C) -> Self::GetChat where C: Into<ChatId> {
+        fn get_chat(&self, chat_id: ChatId) -> Self::GetChat {
             let this = self;
-            $body!(get_chat this (chat_id: C))
+            $body!(get_chat this (chat_id: ChatId))
         }
     };
     (@method get_chat_administrators $body:ident $ty:ident) => {
         type GetChatAdministrators = $ty![GetChatAdministrators];
 
-        fn get_chat_administrators<C>(&self, chat_id: C) -> Self::GetChatAdministrators where C: Into<ChatId> {
+        fn get_chat_administrators(&self, chat_id: ChatId) -> Self::GetChatAdministrators {
             let this = self;
-            $body!(get_chat_administrators this (chat_id: C))
+            $body!(get_chat_administrators this (chat_id: ChatId))
         }
     };
     (@method get_chat_member_count $body:ident $ty:ident) => {
         type GetChatMemberCount = $ty![GetChatMemberCount];
 
-        fn get_chat_member_count<C>(&self, chat_id: C) -> Self::GetChatMemberCount where C: Into<ChatId> {
+        fn get_chat_member_count(&self, chat_id: ChatId) -> Self::GetChatMemberCount {
             let this = self;
-            $body!(get_chat_member_count this (chat_id: C))
+            $body!(get_chat_member_count this (chat_id: ChatId))
         }
     };
     (@method get_chat_members_count $body:ident $ty:ident) => {
         type GetChatMembersCount = $ty![GetChatMembersCount];
 
-        fn get_chat_members_count<C>(&self, chat_id: C) -> Self::GetChatMembersCount where C: Into<ChatId> {
+        fn get_chat_members_count(&self, chat_id: ChatId) -> Self::GetChatMembersCount {
             let this = self;
-            $body!(get_chat_members_count this (chat_id: C))
+            $body!(get_chat_members_count this (chat_id: ChatId))
         }
     };
     (@method get_chat_member $body:ident $ty:ident) => {
         type GetChatMember = $ty![GetChatMember];
 
-        fn get_chat_member<C>(&self, chat_id: C, user_id: i64) -> Self::GetChatMember where C: Into<ChatId> {
+        fn get_chat_member(&self, chat_id: ChatId, user_id: i64) -> Self::GetChatMember {
             let this = self;
-            $body!(get_chat_member this (chat_id: C, user_id: i64))
+            $body!(get_chat_member this (chat_id: ChatId, user_id: i64))
         }
     };
     (@method set_chat_sticker_set $body:ident $ty:ident) => {
         type SetChatStickerSet = $ty![SetChatStickerSet];
 
-        fn set_chat_sticker_set<C, S>(&self, chat_id: C, sticker_set_name: S) -> Self::SetChatStickerSet where C: Into<ChatId>,
-        S: Into<String> {
+        fn set_chat_sticker_set(&self, chat_id: ChatId, sticker_set_name: String) -> Self::SetChatStickerSet {
             let this = self;
-            $body!(set_chat_sticker_set this (chat_id: C, sticker_set_name: S))
+            $body!(set_chat_sticker_set this (chat_id: ChatId, sticker_set_name: String))
         }
     };
     (@method delete_chat_sticker_set $body:ident $ty:ident) => {
         type DeleteChatStickerSet = $ty![DeleteChatStickerSet];
 
-        fn delete_chat_sticker_set<C>(&self, chat_id: C) -> Self::DeleteChatStickerSet where C: Into<ChatId> {
+        fn delete_chat_sticker_set(&self, chat_id: ChatId) -> Self::DeleteChatStickerSet {
             let this = self;
-            $body!(delete_chat_sticker_set this (chat_id: C))
+            $body!(delete_chat_sticker_set this (chat_id: ChatId))
         }
     };
     (@method answer_callback_query $body:ident $ty:ident) => {
         type AnswerCallbackQuery = $ty![AnswerCallbackQuery];
 
-        fn answer_callback_query<C>(&self, callback_query_id: C) -> Self::AnswerCallbackQuery where C: Into<String> {
+        fn answer_callback_query(&self, callback_query_id: String) -> Self::AnswerCallbackQuery {
             let this = self;
-            $body!(answer_callback_query this (callback_query_id: C))
+            $body!(answer_callback_query this (callback_query_id: String))
         }
     };
     (@method set_my_commands $body:ident $ty:ident) => {
         type SetMyCommands = $ty![SetMyCommands];
 
-        fn set_my_commands<C>(&self, commands: C) -> Self::SetMyCommands where C: IntoIterator<Item = BotCommand> {
+        fn set_my_commands(&self, commands: Vec<BotCommand>) -> Self::SetMyCommands {
             let this = self;
-            $body!(set_my_commands this (commands: C))
+            $body!(set_my_commands this (commands: Vec<BotCommand>))
         }
     };
     (@method get_my_commands $body:ident $ty:ident) => {
@@ -970,108 +955,105 @@ macro_rules! requester_forward {
     (@method answer_inline_query $body:ident $ty:ident) => {
         type AnswerInlineQuery = $ty![AnswerInlineQuery];
 
-        fn answer_inline_query<I, R>(&self, inline_query_id: I, results: R) -> Self::AnswerInlineQuery where I: Into<String>,
-        R: IntoIterator<Item = InlineQueryResult> {
+        fn answer_inline_query(&self, inline_query_id: String, results: Vec<InlineQueryResult>) -> Self::AnswerInlineQuery {
             let this = self;
-            $body!(answer_inline_query this (inline_query_id: I, results: R))
+            $body!(answer_inline_query this (inline_query_id: String, results: Vec<InlineQueryResult>))
         }
     };
     (@method edit_message_text $body:ident $ty:ident) => {
         type EditMessageText = $ty![EditMessageText];
 
-        fn edit_message_text<C, T>(&self, chat_id: C, message_id: i32, text: T) -> Self::EditMessageText where C: Into<ChatId>,
-        T: Into<String> {
+        fn edit_message_text(&self, chat_id: ChatId, message_id: i32, text: String) -> Self::EditMessageText {
             let this = self;
-            $body!(edit_message_text this (chat_id: C, message_id: i32, text: T))
+            $body!(edit_message_text this (chat_id: ChatId, message_id: i32, text: String))
         }
     };
     (@method edit_message_text_inline $body:ident $ty:ident) => {
         type EditMessageTextInline = $ty![EditMessageTextInline];
 
-        fn edit_message_text_inline<I, T>(&self, inline_message_id: I, text: T) -> Self::EditMessageTextInline where I: Into<String>,
-        T: Into<String> {
+        fn edit_message_text_inline(&self, inline_message_id: String, text: String) -> Self::EditMessageTextInline {
             let this = self;
-            $body!(edit_message_text_inline this (inline_message_id: I, text: T))
+            $body!(edit_message_text_inline this (inline_message_id: String, text: String))
         }
     };
     (@method edit_message_caption $body:ident $ty:ident) => {
         type EditMessageCaption = $ty![EditMessageCaption];
 
-        fn edit_message_caption<C>(&self, chat_id: C, message_id: i32) -> Self::EditMessageCaption where C: Into<ChatId> {
+        fn edit_message_caption(&self, chat_id: ChatId, message_id: i32) -> Self::EditMessageCaption {
             let this = self;
-            $body!(edit_message_caption this (chat_id: C, message_id: i32))
+            $body!(edit_message_caption this (chat_id: ChatId, message_id: i32))
         }
     };
     (@method edit_message_caption_inline $body:ident $ty:ident) => {
         type EditMessageCaptionInline = $ty![EditMessageCaptionInline];
 
-        fn edit_message_caption_inline<I>(&self, inline_message_id: I) -> Self::EditMessageCaptionInline where I: Into<String> {
+        fn edit_message_caption_inline(&self, inline_message_id: String) -> Self::EditMessageCaptionInline {
             let this = self;
-            $body!(edit_message_caption_inline this (inline_message_id: I))
+            $body!(edit_message_caption_inline this (inline_message_id: String))
         }
     };
     (@method edit_message_media $body:ident $ty:ident) => {
         type EditMessageMedia = $ty![EditMessageMedia];
 
-        fn edit_message_media<C>(&self, chat_id: C, message_id: i32, media: InputMedia) -> Self::EditMessageMedia where C: Into<ChatId> {
+        fn edit_message_media(&self, chat_id: ChatId, message_id: i32, media: InputMedia) -> Self::EditMessageMedia {
             let this = self;
-            $body!(edit_message_media this (chat_id: C, message_id: i32, media: InputMedia))
+            $body!(edit_message_media this (chat_id: ChatId, message_id: i32, media: InputMedia))
         }
     };
     (@method edit_message_media_inline $body:ident $ty:ident) => {
         type EditMessageMediaInline = $ty![EditMessageMediaInline];
 
-        fn edit_message_media_inline<I>(&self, inline_message_id: I, media: InputMedia) -> Self::EditMessageMediaInline where I: Into<String> {
+        fn edit_message_media_inline(&self, inline_message_id: String, media: InputMedia) -> Self::EditMessageMediaInline {
             let this = self;
-            $body!(edit_message_media_inline this (inline_message_id: I, media: InputMedia))
+            $body!(edit_message_media_inline this (inline_message_id: String, media: InputMedia))
         }
     };
     (@method edit_message_reply_markup $body:ident $ty:ident) => {
         type EditMessageReplyMarkup = $ty![EditMessageReplyMarkup];
 
-        fn edit_message_reply_markup<C>(&self, chat_id: C, message_id: i32) -> Self::EditMessageReplyMarkup where C: Into<ChatId> {
+        fn edit_message_reply_markup(&self, chat_id: ChatId, message_id: i32) -> Self::EditMessageReplyMarkup {
             let this = self;
-            $body!(edit_message_reply_markup this (chat_id: C, message_id: i32))
+            $body!(edit_message_reply_markup this (chat_id: ChatId, message_id: i32))
         }
     };
     (@method edit_message_reply_markup_inline $body:ident $ty:ident) => {
         type EditMessageReplyMarkupInline = $ty![EditMessageReplyMarkupInline];
 
-        fn edit_message_reply_markup_inline<I>(&self, inline_message_id: I) -> Self::EditMessageReplyMarkupInline where I: Into<String> {
+        fn edit_message_reply_markup_inline(&self, inline_message_id: String) -> Self::EditMessageReplyMarkupInline {
             let this = self;
-            $body!(edit_message_reply_markup_inline this (inline_message_id: I))
+            $body!(edit_message_reply_markup_inline this (inline_message_id: String))
         }
     };
     (@method stop_poll $body:ident $ty:ident) => {
         type StopPoll = $ty![StopPoll];
 
-        fn stop_poll<C>(&self, chat_id: C, message_id: i32) -> Self::StopPoll where C: Into<ChatId> {
+        fn stop_poll(&self, chat_id: ChatId, message_id: i32) -> Self::StopPoll {
             let this = self;
-            $body!(stop_poll this (chat_id: C, message_id: i32))
+            $body!(stop_poll this (chat_id: ChatId, message_id: i32))
         }
     };
     (@method delete_message $body:ident $ty:ident) => {
         type DeleteMessage = $ty![DeleteMessage];
 
-        fn delete_message<C>(&self, chat_id: C, message_id: i32) -> Self::DeleteMessage where C: Into<ChatId> {
+        fn delete_message(&self, chat_id: ChatId, message_id: i32) -> Self::DeleteMessage {
             let this = self;
-            $body!(delete_message this (chat_id: C, message_id: i32))
+            $body!(delete_message this (chat_id: ChatId, message_id: i32))
         }
     };
     (@method send_sticker $body:ident $ty:ident) => {
         type SendSticker = $ty![SendSticker];
 
-        fn send_sticker<C>(&self, chat_id: C, sticker: InputFile) -> Self::SendSticker where C: Into<ChatId> {
+        fn send_sticker(&self, chat_id: ChatId, sticker: InputFile) -> Self::SendSticker {
             let this = self;
-            $body!(send_sticker this (chat_id: C, sticker: InputFile))
+            $body!(send_sticker this (chat_id: ChatId, sticker: InputFile))
         }
     };
     (@method get_sticker_set $body:ident $ty:ident) => {
         type GetStickerSet = $ty![GetStickerSet];
 
-        fn get_sticker_set<N>(&self, name: N) -> Self::GetStickerSet where N: Into<String> {
+        fn get_sticker_set(&self, name: String) -> Self::GetStickerSet {
             let this = self;
-            $body!(get_sticker_set this (name: N))
+            $body!(get_sticker_set this (name: String))
         }
     };
     (@method upload_sticker_file $body:ident $ty:ident) => {
@@ -1085,90 +1067,81 @@ macro_rules! requester_forward {
     (@method create_new_sticker_set $body:ident $ty:ident) => {
         type CreateNewStickerSet = $ty![CreateNewStickerSet];
 
-        fn create_new_sticker_set<N, T, E>(&self, user_id: i64, name: N, title: T, sticker: InputSticker, emojis: E) -> Self::CreateNewStickerSet where N: Into<String>,
-        T: Into<String>,
-        E: Into<String> {
+        fn create_new_sticker_set(&self, user_id: i64, name: String, title: String, sticker: InputSticker, emojis: String) -> Self::CreateNewStickerSet {
             let this = self;
-            $body!(create_new_sticker_set this (user_id: i64, name: N, title: T, sticker: InputSticker, emojis: E))
+            $body!(create_new_sticker_set this (user_id: i64, name: String, title: String, sticker: InputSticker, emojis: String))
         }
     };
     (@method add_sticker_to_set $body:ident $ty:ident) => {
         type AddStickerToSet = $ty![AddStickerToSet];
 
-        fn add_sticker_to_set<N, E>(&self, user_id: i64, name: N, sticker: InputSticker, emojis: E) -> Self::AddStickerToSet where N: Into<String>,
-        E: Into<String> {
+        fn add_sticker_to_set(&self, user_id: i64, name: String, sticker: InputSticker, emojis: String) -> Self::AddStickerToSet {
             let this = self;
-            $body!(add_sticker_to_set this (user_id: i64, name: N, sticker: InputSticker, emojis: E))
+            $body!(add_sticker_to_set this (user_id: i64, name: String, sticker: InputSticker, emojis: String))
         }
     };
     (@method set_sticker_position_in_set $body:ident $ty:ident) => {
         type SetStickerPositionInSet = $ty![SetStickerPositionInSet];
 
-        fn set_sticker_position_in_set<S>(&self, sticker: S, position: u32) -> Self::SetStickerPositionInSet where S: Into<String> {
+        fn set_sticker_position_in_set(&self, sticker: String, position: u32) -> Self::SetStickerPositionInSet {
             let this = self;
-            $body!(set_sticker_position_in_set this (sticker: S, position: u32))
+            $body!(set_sticker_position_in_set this (sticker: String, position: u32))
         }
     };
     (@method delete_sticker_from_set $body:ident $ty:ident) => {
         type DeleteStickerFromSet = $ty![DeleteStickerFromSet];
 
-        fn delete_sticker_from_set<S>(&self, sticker: S) -> Self::DeleteStickerFromSet where S: Into<String> {
+        fn delete_sticker_from_set(&self, sticker: String) -> Self::DeleteStickerFromSet {
             let this = self;
-            $body!(delete_sticker_from_set this (sticker: S))
+            $body!(delete_sticker_from_set this (sticker: String))
         }
     };
     (@method set_sticker_set_thumb $body:ident $ty:ident) => {
         type SetStickerSetThumb = $ty![SetStickerSetThumb];
 
-        fn set_sticker_set_thumb<N>(&self, name: N, user_id: i64) -> Self::SetStickerSetThumb where N: Into<String> {
+        fn set_sticker_set_thumb(&self, name: String, user_id: i64) -> Self::SetStickerSetThumb {
             let this = self;
-            $body!(set_sticker_set_thumb this (name: N, user_id: i64))
+            $body!(set_sticker_set_thumb this (name: String, user_id: i64))
         }
     };
     (@method send_invoice $body:ident $ty:ident) => {
         type SendInvoice = $ty![SendInvoice];
 
-        fn send_invoice<Ch, T, D, Pa, P, C, Pri>(&self, chat_id: Ch, title: T, description: D, payload: Pa, provider_token: P, currency: C, prices: Pri) -> Self::SendInvoice where Ch: Into<ChatId>,
-        T: Into<String>,
-        D: Into<String>,
-        Pa: Into<String>,
-        P: Into<String>,
-        C: Into<String>,
-        Pri: IntoIterator<Item = LabeledPrice> {
+        fn send_invoice(&self, chat_id: ChatId, title: String, description: String, payload: String, provider_token: String, currency: String, prices: Vec<LabeledPrice>) -> Self::SendInvoice {
             let this = self;
-            $body!(send_invoice this (chat_id: Ch, title: T, description: D, payload: Pa, provider_token: P, currency: C, prices: Pri))
+            $body!(send_invoice this (chat_id: ChatId, title: String, description: String, payload: String, provider_token: String, currency: String, prices: Vec<LabeledPrice>))
         }
     };
     (@method answer_shipping_query $body:ident $ty:ident) => {
         type AnswerShippingQuery = $ty![AnswerShippingQuery];
 
-        fn answer_shipping_query<S>(&self, shipping_query_id: S, ok: bool) -> Self::AnswerShippingQuery where S: Into<String> {
+        fn answer_shipping_query(&self, shipping_query_id: String, ok: bool) -> Self::AnswerShippingQuery {
             let this = self;
-            $body!(answer_shipping_query this (shipping_query_id: S, ok: bool))
+            $body!(answer_shipping_query this (shipping_query_id: String, ok: bool))
         }
     };
     (@method answer_pre_checkout_query $body:ident $ty:ident) => {
         type AnswerPreCheckoutQuery = $ty![AnswerPreCheckoutQuery];
 
-        fn answer_pre_checkout_query<P>(&self, pre_checkout_query_id: P, ok: bool) -> Self::AnswerPreCheckoutQuery where P: Into<String> {
+        fn answer_pre_checkout_query(&self, pre_checkout_query_id: String, ok: bool) -> Self::AnswerPreCheckoutQuery {
             let this = self;
-            $body!(answer_pre_checkout_query this (pre_checkout_query_id: P, ok: bool))
+            $body!(answer_pre_checkout_query this (pre_checkout_query_id: String, ok: bool))
         }
     };
     (@method set_passport_data_errors $body:ident $ty:ident) => {
         type SetPassportDataErrors = $ty![SetPassportDataErrors];
 
-        fn set_passport_data_errors<E>(&self, user_id: i64, errors: E) -> Self::SetPassportDataErrors where E: IntoIterator<Item = PassportElementError> {
+        fn set_passport_data_errors(&self, user_id: i64, errors: Vec<PassportElementError>) -> Self::SetPassportDataErrors {
             let this = self;
-            $body!(set_passport_data_errors this (user_id: i64, errors: E))
+            $body!(set_passport_data_errors this (user_id: i64, errors: Vec<PassportElementError>))
         }
     };
     (@method send_game $body:ident $ty:ident) => {
         type SendGame = $ty![SendGame];
 
-        fn send_game<G>(&self, chat_id: u32, game_short_name: G) -> Self::SendGame where G: Into<String> {
+        fn send_game(&self, chat_id: u32, game_short_name: String) -> Self::SendGame {
             let this = self;
-            $body!(send_game this (chat_id: u32, game_short_name: G))
+            $body!(send_game this (chat_id: u32, game_short_name: String))
         }
     };
     (@method set_game_score $body:ident $ty:ident) => {
@@ -1182,17 +1155,17 @@ macro_rules! requester_forward {
     (@method set_game_score_inline $body:ident $ty:ident) => {
         type SetGameScoreInline = $ty![SetGameScoreInline];
 
-        fn set_game_score_inline<I>(&self, user_id: i64, score: u64, inline_message_id: I) -> Self::SetGameScoreInline where I: Into<String> {
+        fn set_game_score_inline(&self, user_id: i64, score: u64, inline_message_id: String) -> Self::SetGameScoreInline {
             let this = self;
-            $body!(set_game_score_inline this (user_id: i64, score: u64, inline_message_id: I))
+            $body!(set_game_score_inline this (user_id: i64, score: u64, inline_message_id: String))
         }
     };
     (@method get_game_high_scores $body:ident $ty:ident) => {
         type GetGameHighScores = $ty![GetGameHighScores];
 
-        fn get_game_high_scores<T>(&self, user_id: i64, target: T) -> Self::GetGameHighScores where T: Into<TargetMessage> {
+        fn get_game_high_scores(&self, user_id: i64, target: TargetMessage) -> Self::GetGameHighScores {
             let this = self;
-            $body!(get_game_high_scores this (user_id: i64, target: T))
+            $body!(get_game_high_scores this (user_id: i64, target: TargetMessage))
         }
     };
 }

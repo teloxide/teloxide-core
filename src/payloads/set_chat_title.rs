@@ -16,9 +16,9 @@ impl_payload! {
     pub SetChatTitle (SetChatTitleSetters) => True {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// New chat title, 1-255 characters
-            pub title: String [into],
+            pub title: String,
         }
     }
 }

@@ -19,7 +19,7 @@ impl_payload! {
     pub SendDocument (SendDocumentSetters) => Message {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. [More info on Sending Files »]
             ///
             /// [More info on Sending Files »]: crate::types::InputFile
@@ -31,13 +31,13 @@ impl_payload! {
             /// [More info on Sending Files »]: crate::types::InputFile
             pub thumb: InputFile,
             /// Document caption (may also be used when resending documents by _file\_id_), 0-1024 characters after entities parsing
-            pub caption: String [into],
+            pub caption: String,
             /// Mode for parsing entities in the audio caption. See [formatting options] for more details.
             ///
             /// [formatting options]: https://core.telegram.org/bots/api#formatting-options
             pub parse_mode: ParseMode,
             /// List of special entities that appear in the photo caption, which can be specified instead of _parse\_mode_
-            pub caption_entities: Vec<MessageEntity> [collect],
+            pub caption_entities: Vec<MessageEntity>,
             /// Disables automatic server-side content type detection for files uploaded using multipart/form-data.
             pub disable_content_type_detection: bool,
             /// Sends the message [silently]. Users will receive a notification with no sound.
@@ -54,7 +54,7 @@ impl_payload! {
             ///
             /// [inline keyboard]: https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating
             /// [custom reply keyboard]: https://core.telegram.org/bots#keyboards
-            pub reply_markup: ReplyMarkup [into],
+            pub reply_markup: ReplyMarkup,
         }
     }
 }

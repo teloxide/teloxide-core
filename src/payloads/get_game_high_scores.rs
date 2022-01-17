@@ -23,7 +23,7 @@ impl_payload! {
             pub user_id: i64,
             /// Target message
             #[serde(flatten)]
-            pub target: TargetMessage [into],
+            pub target: TargetMessage,
         }
     }
 }

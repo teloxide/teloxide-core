@@ -101,108 +101,83 @@ pub trait Requester {
     type SendMessage: Request<Payload = SendMessage, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendMessage`].
-    fn send_message<C, T>(&self, chat_id: C, text: T) -> Self::SendMessage
-    where
-        C: Into<ChatId>,
-        T: Into<String>;
+    fn send_message(&self, chat_id: ChatId, text: String) -> Self::SendMessage;
 
     type ForwardMessage: Request<Payload = ForwardMessage, Err = Self::Err>;
 
     /// For Telegram documentation see [`ForwardMessage`].
-    fn forward_message<C, F>(
+    fn forward_message(
         &self,
-        chat_id: C,
-        from_chat_id: F,
+        chat_id: ChatId,
+        from_chat_id: ChatId,
         message_id: i32,
-    ) -> Self::ForwardMessage
-    where
-        C: Into<ChatId>,
-        F: Into<ChatId>;
+    ) -> Self::ForwardMessage;
 
     type CopyMessage: Request<Payload = CopyMessage, Err = Self::Err>;
 
     /// For Telegram documentation see [`CopyMessage`].
-    fn copy_message<C, F>(&self, chat_id: C, from_chat_id: F, message_id: i32) -> Self::CopyMessage
-    where
-        C: Into<ChatId>,
-        F: Into<ChatId>;
+    fn copy_message(
+        &self,
+        chat_id: ChatId,
+        from_chat_id: ChatId,
+        message_id: i32,
+    ) -> Self::CopyMessage;
 
     type SendPhoto: Request<Payload = SendPhoto, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendPhoto`].
-    fn send_photo<C>(&self, chat_id: C, photo: InputFile) -> Self::SendPhoto
-    where
-        C: Into<ChatId>;
+    fn send_photo(&self, chat_id: ChatId, photo: InputFile) -> Self::SendPhoto;
 
     type SendAudio: Request<Payload = SendAudio, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendAudio`].
-    fn send_audio<C>(&self, chat_id: C, audio: InputFile) -> Self::SendAudio
-    where
-        C: Into<ChatId>;
+    fn send_audio(&self, chat_id: ChatId, audio: InputFile) -> Self::SendAudio;
 
     type SendDocument: Request<Payload = SendDocument, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendDocument`].
-    fn send_document<C>(&self, chat_id: C, document: InputFile) -> Self::SendDocument
-    where
-        C: Into<ChatId>;
+    fn send_document(&self, chat_id: ChatId, document: InputFile) -> Self::SendDocument;
 
     type SendVideo: Request<Payload = SendVideo, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendVideo`].
-    fn send_video<C>(&self, chat_id: C, video: InputFile) -> Self::SendVideo
-    where
-        C: Into<ChatId>;
+    fn send_video(&self, chat_id: ChatId, video: InputFile) -> Self::SendVideo;
 
     type SendAnimation: Request<Payload = SendAnimation, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendAnimation`].
-    fn send_animation<C>(&self, chat_id: C, animation: InputFile) -> Self::SendAnimation
-    where
-        C: Into<ChatId>;
+    fn send_animation(&self, chat_id: ChatId, animation: InputFile) -> Self::SendAnimation;
 
     type SendVoice: Request<Payload = SendVoice, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendVoice`].
-    fn send_voice<C>(&self, chat_id: C, voice: InputFile) -> Self::SendVoice
-    where
-        C: Into<ChatId>;
+    fn send_voice(&self, chat_id: ChatId, voice: InputFile) -> Self::SendVoice;
 
     type SendVideoNote: Request<Payload = SendVideoNote, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendVideoNote`].
-    fn send_video_note<C>(&self, chat_id: C, video_note: InputFile) -> Self::SendVideoNote
-    where
-        C: Into<ChatId>;
+    fn send_video_note(&self, chat_id: ChatId, video_note: InputFile) -> Self::SendVideoNote;
 
     type SendMediaGroup: Request<Payload = SendMediaGroup, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendMediaGroup`].
-    fn send_media_group<C, M>(&self, chat_id: C, media: M) -> Self::SendMediaGroup
-    where
-        C: Into<ChatId>,
-        M: IntoIterator<Item = InputMedia>;
+    fn send_media_group(&self, chat_id: ChatId, media: Vec<InputMedia>) -> Self::SendMediaGroup;
 
     type SendLocation: Request<Payload = SendLocation, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendLocation`].
-    fn send_location<C>(&self, chat_id: C, latitude: f64, longitude: f64) -> Self::SendLocation
-    where
-        C: Into<ChatId>;
+    fn send_location(&self, chat_id: ChatId, latitude: f64, longitude: f64) -> Self::SendLocation;
 
     type EditMessageLiveLocation: Request<Payload = EditMessageLiveLocation, Err = Self::Err>;
 
     /// For Telegram documentation see [`EditMessageLiveLocation`].
-    fn edit_message_live_location<C>(
+    fn edit_message_live_location(
         &self,
-        chat_id: C,
+        chat_id: ChatId,
         message_id: i32,
         latitude: f64,
         longitude: f64,
-    ) -> Self::EditMessageLiveLocation
-    where
-        C: Into<ChatId>;
+    ) -> Self::EditMessageLiveLocation;
 
     type EditMessageLiveLocationInline: Request<
         Payload = EditMessageLiveLocationInline,
@@ -210,27 +185,23 @@ pub trait Requester {
     >;
 
     /// For Telegram documentation see [`EditMessageLiveLocationInline`].
-    fn edit_message_live_location_inline<I>(
+    fn edit_message_live_location_inline(
         &self,
-        inline_message_id: I,
+        inline_message_id: String,
         latitude: f64,
         longitude: f64,
-    ) -> Self::EditMessageLiveLocationInline
-    where
-        I: Into<String>;
+    ) -> Self::EditMessageLiveLocationInline;
 
     type StopMessageLiveLocation: Request<Payload = StopMessageLiveLocation, Err = Self::Err>;
 
     /// For Telegram documentation see [`StopMessageLiveLocation`].
-    fn stop_message_live_location<C>(
+    fn stop_message_live_location(
         &self,
-        chat_id: C,
+        chat_id: ChatId,
         message_id: i32,
         latitude: f64,
         longitude: f64,
-    ) -> Self::StopMessageLiveLocation
-    where
-        C: Into<ChatId>;
+    ) -> Self::StopMessageLiveLocation;
 
     type StopMessageLiveLocationInline: Request<
         Payload = StopMessageLiveLocationInline,
@@ -238,67 +209,49 @@ pub trait Requester {
     >;
 
     /// For Telegram documentation see [`StopMessageLiveLocationInline`].
-    fn stop_message_live_location_inline<I>(
+    fn stop_message_live_location_inline(
         &self,
-        inline_message_id: I,
+        inline_message_id: String,
         latitude: f64,
         longitude: f64,
-    ) -> Self::StopMessageLiveLocationInline
-    where
-        I: Into<String>;
+    ) -> Self::StopMessageLiveLocationInline;
 
     type SendVenue: Request<Payload = SendVenue, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendVenue`].
-    fn send_venue<C, T, A>(
+    fn send_venue(
         &self,
-        chat_id: C,
+        chat_id: ChatId,
         latitude: f64,
         longitude: f64,
-        title: T,
-        address: A,
-    ) -> Self::SendVenue
-    where
-        C: Into<ChatId>,
-        T: Into<String>,
-        A: Into<String>;
+        title: String,
+        address: String,
+    ) -> Self::SendVenue;
 
     type SendContact: Request<Payload = SendContact, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendContact`].
-    fn send_contact<C, P, F>(
+    fn send_contact(
         &self,
-        chat_id: C,
-        phone_number: P,
-        first_name: F,
-    ) -> Self::SendContact
-    where
-        C: Into<ChatId>,
-        P: Into<String>,
-        F: Into<String>;
+        chat_id: ChatId,
+        phone_number: String,
+        first_name: String,
+    ) -> Self::SendContact;
 
     type SendPoll: Request<Payload = SendPoll, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendPoll`].
-    fn send_poll<C, Q, O>(&self, chat_id: C, question: Q, options: O) -> Self::SendPoll
-    where
-        C: Into<ChatId>,
-        Q: Into<String>,
-        O: IntoIterator<Item = String>;
+    fn send_poll(&self, chat_id: ChatId, question: String, options: Vec<String>) -> Self::SendPoll;
 
     type SendDice: Request<Payload = SendDice, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendDice`].
-    fn send_dice<C>(&self, chat_id: C) -> Self::SendDice
-    where
-        C: Into<ChatId>;
+    fn send_dice(&self, chat_id: ChatId) -> Self::SendDice;
 
     type SendChatAction: Request<Payload = SendChatAction, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendChatAction`].
-    fn send_chat_action<C>(&self, chat_id: C, action: ChatAction) -> Self::SendChatAction
-    where
-        C: Into<ChatId>;
+    fn send_chat_action(&self, chat_id: ChatId, action: ChatAction) -> Self::SendChatAction;
 
     type GetUserProfilePhotos: Request<Payload = GetUserProfilePhotos, Err = Self::Err>;
 
@@ -308,49 +261,37 @@ pub trait Requester {
     type GetFile: Request<Payload = GetFile, Err = Self::Err>;
 
     /// For Telegram documentation see [`GetFile`].
-    fn get_file<F>(&self, file_id: F) -> Self::GetFile
-    where
-        F: Into<String>;
+    fn get_file(&self, file_id: String) -> Self::GetFile;
 
     type BanChatMember: Request<Payload = BanChatMember, Err = Self::Err>;
 
     /// For Telegram documentation see [`BanChatMember`].
-    fn ban_chat_member<C>(&self, chat_id: C, user_id: i64) -> Self::BanChatMember
-    where
-        C: Into<ChatId>;
+    fn ban_chat_member(&self, chat_id: ChatId, user_id: i64) -> Self::BanChatMember;
 
     type KickChatMember: Request<Payload = KickChatMember, Err = Self::Err>;
 
     /// For Telegram documentation see [`KickChatMember`].
-    fn kick_chat_member<C>(&self, chat_id: C, user_id: i64) -> Self::KickChatMember
-    where
-        C: Into<ChatId>;
+    fn kick_chat_member(&self, chat_id: ChatId, user_id: i64) -> Self::KickChatMember;
 
     type UnbanChatMember: Request<Payload = UnbanChatMember, Err = Self::Err>;
 
     /// For Telegram documentation see [`UnbanChatMember`].
-    fn unban_chat_member<C>(&self, chat_id: C, user_id: i64) -> Self::UnbanChatMember
-    where
-        C: Into<ChatId>;
+    fn unban_chat_member(&self, chat_id: ChatId, user_id: i64) -> Self::UnbanChatMember;
 
     type RestrictChatMember: Request<Payload = RestrictChatMember, Err = Self::Err>;
 
     /// For Telegram documentation see [`RestrictChatMember`].
-    fn restrict_chat_member<C>(
+    fn restrict_chat_member(
         &self,
-        chat_id: C,
+        chat_id: ChatId,
         user_id: i64,
         permissions: ChatPermissions,
-    ) -> Self::RestrictChatMember
-    where
-        C: Into<ChatId>;
+    ) -> Self::RestrictChatMember;
 
     type PromoteChatMember: Request<Payload = PromoteChatMember, Err = Self::Err>;
 
     /// For Telegram documentation see [`PromoteChatMember`].
-    fn promote_chat_member<C>(&self, chat_id: C, user_id: i64) -> Self::PromoteChatMember
-    where
-        C: Into<ChatId>;
+    fn promote_chat_member(&self, chat_id: ChatId, user_id: i64) -> Self::PromoteChatMember;
 
     type SetChatAdministratorCustomTitle: Request<
         Payload = SetChatAdministratorCustomTitle,
@@ -358,225 +299,171 @@ pub trait Requester {
     >;
 
     /// For Telegram documentation see [`SetChatAdministratorCustomTitle`].
-    fn set_chat_administrator_custom_title<Ch, Cu>(
+    fn set_chat_administrator_custom_title(
         &self,
-        chat_id: Ch,
+        chat_id: ChatId,
         user_id: i64,
-        custom_title: Cu,
-    ) -> Self::SetChatAdministratorCustomTitle
-    where
-        Ch: Into<ChatId>,
-        Cu: Into<String>;
+        custom_title: String,
+    ) -> Self::SetChatAdministratorCustomTitle;
 
     type BanChatSenderChat: Request<Payload = BanChatSenderChat, Err = Self::Err>;
 
     /// For Telegram documentation see [`BanChatSenderChat`].
-    fn ban_chat_sender_chat<C>(&self, chat_id: C, sender_chat_id: i64) -> Self::BanChatSenderChat
-    where
-        C: Into<ChatId>;
+    fn ban_chat_sender_chat(&self, chat_id: ChatId, sender_chat_id: i64)
+        -> Self::BanChatSenderChat;
 
     type UnbanChatSenderChat: Request<Payload = UnbanChatSenderChat, Err = Self::Err>;
 
     /// For Telegram documentation see [`UnbanChatSenderChat`].
-    fn unban_chat_sender_chat<C>(
+    fn unban_chat_sender_chat(
         &self,
-        chat_id: C,
+        chat_id: ChatId,
         sender_chat_id: i64,
-    ) -> Self::UnbanChatSenderChat
-    where
-        C: Into<ChatId>;
+    ) -> Self::UnbanChatSenderChat;
 
     type SetChatPermissions: Request<Payload = SetChatPermissions, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetChatPermissions`].
-    fn set_chat_permissions<C>(
+    fn set_chat_permissions(
         &self,
-        chat_id: C,
+        chat_id: ChatId,
         permissions: ChatPermissions,
-    ) -> Self::SetChatPermissions
-    where
-        C: Into<ChatId>;
+    ) -> Self::SetChatPermissions;
 
     type ExportChatInviteLink: Request<Payload = ExportChatInviteLink, Err = Self::Err>;
 
     /// For Telegram documentation see [`ExportChatInviteLink`].
-    fn export_chat_invite_link<C>(&self, chat_id: C) -> Self::ExportChatInviteLink
-    where
-        C: Into<ChatId>;
+    fn export_chat_invite_link(&self, chat_id: ChatId) -> Self::ExportChatInviteLink;
 
     type CreateChatInviteLink: Request<Payload = CreateChatInviteLink, Err = Self::Err>;
 
     /// For Telegram documentation see [`CreateChatInviteLink`].
-    fn create_chat_invite_link<C>(&self, chat_id: C) -> Self::CreateChatInviteLink
-    where
-        C: Into<ChatId>;
+    fn create_chat_invite_link(&self, chat_id: ChatId) -> Self::CreateChatInviteLink;
 
     type EditChatInviteLink: Request<Payload = EditChatInviteLink, Err = Self::Err>;
 
     /// For Telegram documentation see [`EditChatInviteLink`].
-    fn edit_chat_invite_link<C, I>(&self, chat_id: C, invite_link: I) -> Self::EditChatInviteLink
-    where
-        C: Into<ChatId>,
-        I: Into<String>;
+    fn edit_chat_invite_link(
+        &self,
+        chat_id: ChatId,
+        invite_link: String,
+    ) -> Self::EditChatInviteLink;
 
     type RevokeChatInviteLink: Request<Payload = RevokeChatInviteLink, Err = Self::Err>;
 
     /// For Telegram documentation see [`RevokeChatInviteLink`].
-    fn revoke_chat_invite_link<C, I>(
+    fn revoke_chat_invite_link(
         &self,
-        chat_id: C,
-        invite_link: I,
-    ) -> Self::RevokeChatInviteLink
-    where
-        C: Into<ChatId>,
-        I: Into<String>;
+        chat_id: ChatId,
+        invite_link: String,
+    ) -> Self::RevokeChatInviteLink;
 
     type ApproveChatJoinRequest: Request<Payload = ApproveChatJoinRequest, Err = Self::Err>;
 
     /// For Telegram documentation see [`ApproveChatJoinRequest`].
-    fn approve_chat_join_request<C>(
+    fn approve_chat_join_request(
         &self,
-        chat_id: C,
+        chat_id: ChatId,
         user_id: i64,
-    ) -> Self::ApproveChatJoinRequest
-    where
-        C: Into<ChatId>;
+    ) -> Self::ApproveChatJoinRequest;
 
     type DeclineChatJoinRequest: Request<Payload = DeclineChatJoinRequest, Err = Self::Err>;
 
     /// For Telegram documentation see [`DeclineChatJoinRequest`].
-    fn decline_chat_join_request<C>(
+    fn decline_chat_join_request(
         &self,
-        chat_id: C,
+        chat_id: ChatId,
         user_id: i64,
-    ) -> Self::DeclineChatJoinRequest
-    where
-        C: Into<ChatId>;
+    ) -> Self::DeclineChatJoinRequest;
 
     type SetChatPhoto: Request<Payload = SetChatPhoto, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetChatPhoto`].
-    fn set_chat_photo<C>(&self, chat_id: C, photo: InputFile) -> Self::SetChatPhoto
-    where
-        C: Into<ChatId>;
+    fn set_chat_photo(&self, chat_id: ChatId, photo: InputFile) -> Self::SetChatPhoto;
 
     type DeleteChatPhoto: Request<Payload = DeleteChatPhoto, Err = Self::Err>;
 
     /// For Telegram documentation see [`DeleteChatPhoto`].
-    fn delete_chat_photo<C>(&self, chat_id: C) -> Self::DeleteChatPhoto
-    where
-        C: Into<ChatId>;
+    fn delete_chat_photo(&self, chat_id: ChatId) -> Self::DeleteChatPhoto;
 
     type SetChatTitle: Request<Payload = SetChatTitle, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetChatTitle`].
-    fn set_chat_title<C, T>(&self, chat_id: C, title: T) -> Self::SetChatTitle
-    where
-        C: Into<ChatId>,
-        T: Into<String>;
+    fn set_chat_title(&self, chat_id: ChatId, title: String) -> Self::SetChatTitle;
 
     type SetChatDescription: Request<Payload = SetChatDescription, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetChatDescription`].
-    fn set_chat_description<C>(&self, chat_id: C) -> Self::SetChatDescription
-    where
-        C: Into<ChatId>;
+    fn set_chat_description(&self, chat_id: ChatId) -> Self::SetChatDescription;
 
     type PinChatMessage: Request<Payload = PinChatMessage, Err = Self::Err>;
 
     /// For Telegram documentation see [`PinChatMessage`].
-    fn pin_chat_message<C>(&self, chat_id: C, message_id: i32) -> Self::PinChatMessage
-    where
-        C: Into<ChatId>;
+    fn pin_chat_message(&self, chat_id: ChatId, message_id: i32) -> Self::PinChatMessage;
 
     type UnpinChatMessage: Request<Payload = UnpinChatMessage, Err = Self::Err>;
 
     /// For Telegram documentation see [`UnpinChatMessage`].
-    fn unpin_chat_message<C>(&self, chat_id: C) -> Self::UnpinChatMessage
-    where
-        C: Into<ChatId>;
+    fn unpin_chat_message(&self, chat_id: ChatId) -> Self::UnpinChatMessage;
 
     type UnpinAllChatMessages: Request<Payload = UnpinAllChatMessages, Err = Self::Err>;
 
     /// For Telegram documentation see [`UnpinAllChatMessages`].
-    fn unpin_all_chat_messages<C>(&self, chat_id: C) -> Self::UnpinAllChatMessages
-    where
-        C: Into<ChatId>;
+    fn unpin_all_chat_messages(&self, chat_id: ChatId) -> Self::UnpinAllChatMessages;
 
     type LeaveChat: Request<Payload = LeaveChat, Err = Self::Err>;
 
     /// For Telegram documentation see [`LeaveChat`].
-    fn leave_chat<C>(&self, chat_id: C) -> Self::LeaveChat
-    where
-        C: Into<ChatId>;
+    fn leave_chat(&self, chat_id: ChatId) -> Self::LeaveChat;
 
     type GetChat: Request<Payload = GetChat, Err = Self::Err>;
 
     /// For Telegram documentation see [`GetChat`].
-    fn get_chat<C>(&self, chat_id: C) -> Self::GetChat
-    where
-        C: Into<ChatId>;
+    fn get_chat(&self, chat_id: ChatId) -> Self::GetChat;
 
     type GetChatAdministrators: Request<Payload = GetChatAdministrators, Err = Self::Err>;
 
     /// For Telegram documentation see [`GetChatAdministrators`].
-    fn get_chat_administrators<C>(&self, chat_id: C) -> Self::GetChatAdministrators
-    where
-        C: Into<ChatId>;
+    fn get_chat_administrators(&self, chat_id: ChatId) -> Self::GetChatAdministrators;
 
     type GetChatMemberCount: Request<Payload = GetChatMemberCount, Err = Self::Err>;
 
     /// For Telegram documentation see [`GetChatMemberCount`].
-    fn get_chat_member_count<C>(&self, chat_id: C) -> Self::GetChatMemberCount
-    where
-        C: Into<ChatId>;
+    fn get_chat_member_count(&self, chat_id: ChatId) -> Self::GetChatMemberCount;
 
     type GetChatMembersCount: Request<Payload = GetChatMembersCount, Err = Self::Err>;
 
     /// For Telegram documentation see [`GetChatMembersCount`].
-    fn get_chat_members_count<C>(&self, chat_id: C) -> Self::GetChatMembersCount
-    where
-        C: Into<ChatId>;
+    fn get_chat_members_count(&self, chat_id: ChatId) -> Self::GetChatMembersCount;
 
     type GetChatMember: Request<Payload = GetChatMember, Err = Self::Err>;
 
     /// For Telegram documentation see [`GetChatMember`].
-    fn get_chat_member<C>(&self, chat_id: C, user_id: i64) -> Self::GetChatMember
-    where
-        C: Into<ChatId>;
+    fn get_chat_member(&self, chat_id: ChatId, user_id: i64) -> Self::GetChatMember;
 
     type SetChatStickerSet: Request<Payload = SetChatStickerSet, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetChatStickerSet`].
-    fn set_chat_sticker_set<C, S>(
+    fn set_chat_sticker_set(
         &self,
-        chat_id: C,
-        sticker_set_name: S,
-    ) -> Self::SetChatStickerSet
-    where
-        C: Into<ChatId>,
-        S: Into<String>;
+        chat_id: ChatId,
+        sticker_set_name: String,
+    ) -> Self::SetChatStickerSet;
 
     type DeleteChatStickerSet: Request<Payload = DeleteChatStickerSet, Err = Self::Err>;
 
     /// For Telegram documentation see [`DeleteChatStickerSet`].
-    fn delete_chat_sticker_set<C>(&self, chat_id: C) -> Self::DeleteChatStickerSet
-    where
-        C: Into<ChatId>;
+    fn delete_chat_sticker_set(&self, chat_id: ChatId) -> Self::DeleteChatStickerSet;
 
     type AnswerCallbackQuery: Request<Payload = AnswerCallbackQuery, Err = Self::Err>;
 
     /// For Telegram documentation see [`AnswerCallbackQuery`].
-    fn answer_callback_query<C>(&self, callback_query_id: C) -> Self::AnswerCallbackQuery
-    where
-        C: Into<String>;
+    fn answer_callback_query(&self, callback_query_id: String) -> Self::AnswerCallbackQuery;
 
     type SetMyCommands: Request<Payload = SetMyCommands, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetMyCommands`].
-    fn set_my_commands<C>(&self, commands: C) -> Self::SetMyCommands
-    where
-        C: IntoIterator<Item = BotCommand>;
+    fn set_my_commands(&self, commands: Vec<BotCommand>) -> Self::SetMyCommands;
 
     type GetMyCommands: Request<Payload = GetMyCommands, Err = Self::Err>;
 
@@ -591,86 +478,71 @@ pub trait Requester {
     type AnswerInlineQuery: Request<Payload = AnswerInlineQuery, Err = Self::Err>;
 
     /// For Telegram documentation see [`AnswerInlineQuery`].
-    fn answer_inline_query<I, R>(&self, inline_query_id: I, results: R) -> Self::AnswerInlineQuery
-    where
-        I: Into<String>,
-        R: IntoIterator<Item = InlineQueryResult>;
+    fn answer_inline_query(
+        &self,
+        inline_query_id: String,
+        results: Vec<InlineQueryResult>,
+    ) -> Self::AnswerInlineQuery;
 
     type EditMessageText: Request<Payload = EditMessageText, Err = Self::Err>;
 
     /// For Telegram documentation see [`EditMessageText`].
-    fn edit_message_text<C, T>(
+    fn edit_message_text(
         &self,
-        chat_id: C,
+        chat_id: ChatId,
         message_id: i32,
-        text: T,
-    ) -> Self::EditMessageText
-    where
-        C: Into<ChatId>,
-        T: Into<String>;
+        text: String,
+    ) -> Self::EditMessageText;
 
     type EditMessageTextInline: Request<Payload = EditMessageTextInline, Err = Self::Err>;
 
     /// For Telegram documentation see [`EditMessageTextInline`].
-    fn edit_message_text_inline<I, T>(
+    fn edit_message_text_inline(
         &self,
-        inline_message_id: I,
-        text: T,
-    ) -> Self::EditMessageTextInline
-    where
-        I: Into<String>,
-        T: Into<String>;
+        inline_message_id: String,
+        text: String,
+    ) -> Self::EditMessageTextInline;
 
     type EditMessageCaption: Request<Payload = EditMessageCaption, Err = Self::Err>;
 
     /// For Telegram documentation see [`EditMessageCaption`].
-    fn edit_message_caption<C>(&self, chat_id: C, message_id: i32) -> Self::EditMessageCaption
-    where
-        C: Into<ChatId>;
+    fn edit_message_caption(&self, chat_id: ChatId, message_id: i32) -> Self::EditMessageCaption;
 
     type EditMessageCaptionInline: Request<Payload = EditMessageCaptionInline, Err = Self::Err>;
 
     /// For Telegram documentation see [`EditMessageCaptionInline`].
-    fn edit_message_caption_inline<I>(
+    fn edit_message_caption_inline(
         &self,
-        inline_message_id: I,
-    ) -> Self::EditMessageCaptionInline
-    where
-        I: Into<String>;
+        inline_message_id: String,
+    ) -> Self::EditMessageCaptionInline;
 
     type EditMessageMedia: Request<Payload = EditMessageMedia, Err = Self::Err>;
 
     /// For Telegram documentation see [`EditMessageMedia`].
-    fn edit_message_media<C>(
+    fn edit_message_media(
         &self,
-        chat_id: C,
+        chat_id: ChatId,
         message_id: i32,
         media: InputMedia,
-    ) -> Self::EditMessageMedia
-    where
-        C: Into<ChatId>;
+    ) -> Self::EditMessageMedia;
 
     type EditMessageMediaInline: Request<Payload = EditMessageMediaInline, Err = Self::Err>;
 
     /// For Telegram documentation see [`EditMessageMediaInline`].
-    fn edit_message_media_inline<I>(
+    fn edit_message_media_inline(
         &self,
-        inline_message_id: I,
+        inline_message_id: String,
         media: InputMedia,
-    ) -> Self::EditMessageMediaInline
-    where
-        I: Into<String>;
+    ) -> Self::EditMessageMediaInline;
 
     type EditMessageReplyMarkup: Request<Payload = EditMessageReplyMarkup, Err = Self::Err>;
 
     /// For Telegram documentation see [`EditMessageReplyMarkup`].
-    fn edit_message_reply_markup<C>(
+    fn edit_message_reply_markup(
         &self,
-        chat_id: C,
+        chat_id: ChatId,
         message_id: i32,
-    ) -> Self::EditMessageReplyMarkup
-    where
-        C: Into<ChatId>;
+    ) -> Self::EditMessageReplyMarkup;
 
     type EditMessageReplyMarkupInline: Request<
         Payload = EditMessageReplyMarkupInline,
@@ -678,40 +550,30 @@ pub trait Requester {
     >;
 
     /// For Telegram documentation see [`EditMessageReplyMarkupInline`].
-    fn edit_message_reply_markup_inline<I>(
+    fn edit_message_reply_markup_inline(
         &self,
-        inline_message_id: I,
-    ) -> Self::EditMessageReplyMarkupInline
-    where
-        I: Into<String>;
+        inline_message_id: String,
+    ) -> Self::EditMessageReplyMarkupInline;
 
     type StopPoll: Request<Payload = StopPoll, Err = Self::Err>;
 
     /// For Telegram documentation see [`StopPoll`].
-    fn stop_poll<C>(&self, chat_id: C, message_id: i32) -> Self::StopPoll
-    where
-        C: Into<ChatId>;
+    fn stop_poll(&self, chat_id: ChatId, message_id: i32) -> Self::StopPoll;
 
     type DeleteMessage: Request<Payload = DeleteMessage, Err = Self::Err>;
 
     /// For Telegram documentation see [`DeleteMessage`].
-    fn delete_message<C>(&self, chat_id: C, message_id: i32) -> Self::DeleteMessage
-    where
-        C: Into<ChatId>;
+    fn delete_message(&self, chat_id: ChatId, message_id: i32) -> Self::DeleteMessage;
 
     type SendSticker: Request<Payload = SendSticker, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendSticker`].
-    fn send_sticker<C>(&self, chat_id: C, sticker: InputFile) -> Self::SendSticker
-    where
-        C: Into<ChatId>;
+    fn send_sticker(&self, chat_id: ChatId, sticker: InputFile) -> Self::SendSticker;
 
     type GetStickerSet: Request<Payload = GetStickerSet, Err = Self::Err>;
 
     /// For Telegram documentation see [`GetStickerSet`].
-    fn get_sticker_set<N>(&self, name: N) -> Self::GetStickerSet
-    where
-        N: Into<String>;
+    fn get_sticker_set(&self, name: String) -> Self::GetStickerSet;
 
     type UploadStickerFile: Request<Payload = UploadStickerFile, Err = Self::Err>;
 
@@ -721,111 +583,90 @@ pub trait Requester {
     type CreateNewStickerSet: Request<Payload = CreateNewStickerSet, Err = Self::Err>;
 
     /// For Telegram documentation see [`CreateNewStickerSet`].
-    fn create_new_sticker_set<N, T, E>(
+    fn create_new_sticker_set(
         &self,
         user_id: i64,
-        name: N,
-        title: T,
+        name: String,
+        title: String,
         sticker: InputSticker,
-        emojis: E,
-    ) -> Self::CreateNewStickerSet
-    where
-        N: Into<String>,
-        T: Into<String>,
-        E: Into<String>;
+        emojis: String,
+    ) -> Self::CreateNewStickerSet;
 
     type AddStickerToSet: Request<Payload = AddStickerToSet, Err = Self::Err>;
 
     /// For Telegram documentation see [`AddStickerToSet`].
-    fn add_sticker_to_set<N, E>(
+    fn add_sticker_to_set(
         &self,
         user_id: i64,
-        name: N,
+        name: String,
         sticker: InputSticker,
-        emojis: E,
-    ) -> Self::AddStickerToSet
-    where
-        N: Into<String>,
-        E: Into<String>;
+        emojis: String,
+    ) -> Self::AddStickerToSet;
 
     type SetStickerPositionInSet: Request<Payload = SetStickerPositionInSet, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetStickerPositionInSet`].
-    fn set_sticker_position_in_set<S>(
+    fn set_sticker_position_in_set(
         &self,
-        sticker: S,
+        sticker: String,
         position: u32,
-    ) -> Self::SetStickerPositionInSet
-    where
-        S: Into<String>;
+    ) -> Self::SetStickerPositionInSet;
 
     type DeleteStickerFromSet: Request<Payload = DeleteStickerFromSet, Err = Self::Err>;
 
     /// For Telegram documentation see [`DeleteStickerFromSet`].
-    fn delete_sticker_from_set<S>(&self, sticker: S) -> Self::DeleteStickerFromSet
-    where
-        S: Into<String>;
+    fn delete_sticker_from_set(&self, sticker: String) -> Self::DeleteStickerFromSet;
 
     type SetStickerSetThumb: Request<Payload = SetStickerSetThumb, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetStickerSetThumb`].
-    fn set_sticker_set_thumb<N>(&self, name: N, user_id: i64) -> Self::SetStickerSetThumb
-    where
-        N: Into<String>;
+    fn set_sticker_set_thumb(&self, name: String, user_id: i64) -> Self::SetStickerSetThumb;
 
     type SendInvoice: Request<Payload = SendInvoice, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendInvoice`].
-    fn send_invoice<Ch, T, D, Pa, P, C, Pri>(
+    fn send_invoice(
         &self,
-        chat_id: Ch,
-        title: T,
-        description: D,
-        payload: Pa,
-        provider_token: P,
-        currency: C,
-        prices: Pri,
-    ) -> Self::SendInvoice
-    where
-        Ch: Into<ChatId>,
-        T: Into<String>,
-        D: Into<String>,
-        Pa: Into<String>,
-        P: Into<String>,
-        C: Into<String>,
-        Pri: IntoIterator<Item = LabeledPrice>;
+        chat_id: ChatId,
+        title: String,
+        description: String,
+        payload: String,
+        provider_token: String,
+        currency: String,
+        prices: Vec<LabeledPrice>,
+    ) -> Self::SendInvoice;
 
     type AnswerShippingQuery: Request<Payload = AnswerShippingQuery, Err = Self::Err>;
 
     /// For Telegram documentation see [`AnswerShippingQuery`].
-    fn answer_shipping_query<S>(&self, shipping_query_id: S, ok: bool) -> Self::AnswerShippingQuery
-    where
-        S: Into<String>;
+    fn answer_shipping_query(
+        &self,
+        shipping_query_id: String,
+        ok: bool,
+    ) -> Self::AnswerShippingQuery;
 
     type AnswerPreCheckoutQuery: Request<Payload = AnswerPreCheckoutQuery, Err = Self::Err>;
 
     /// For Telegram documentation see [`AnswerPreCheckoutQuery`].
-    fn answer_pre_checkout_query<P>(
+    fn answer_pre_checkout_query(
         &self,
-        pre_checkout_query_id: P,
+        pre_checkout_query_id: String,
         ok: bool,
-    ) -> Self::AnswerPreCheckoutQuery
-    where
-        P: Into<String>;
+    ) -> Self::AnswerPreCheckoutQuery;
 
     type SetPassportDataErrors: Request<Payload = SetPassportDataErrors, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetPassportDataErrors`].
-    fn set_passport_data_errors<E>(&self, user_id: i64, errors: E) -> Self::SetPassportDataErrors
-    where
-        E: IntoIterator<Item = PassportElementError>;
+    fn set_passport_data_errors(
+        &self,
+        user_id: i64,
+        errors: Vec<PassportElementError>,
+    ) -> Self::SetPassportDataErrors;
 
     type SendGame: Request<Payload = SendGame, Err = Self::Err>;
 
     /// For Telegram documentation see [`SendGame`].
-    fn send_game<G>(&self, chat_id: u32, game_short_name: G) -> Self::SendGame
-    where
-        G: Into<String>;
+    fn send_game(&self, chat_id: u32, game_short_name: String) -> Self::SendGame;
 
     type SetGameScore: Request<Payload = SetGameScore, Err = Self::Err>;
 
@@ -841,21 +682,17 @@ pub trait Requester {
     type SetGameScoreInline: Request<Payload = SetGameScoreInline, Err = Self::Err>;
 
     /// For Telegram documentation see [`SetGameScoreInline`].
-    fn set_game_score_inline<I>(
+    fn set_game_score_inline(
         &self,
         user_id: i64,
         score: u64,
-        inline_message_id: I,
-    ) -> Self::SetGameScoreInline
-    where
-        I: Into<String>;
+        inline_message_id: String,
+    ) -> Self::SetGameScoreInline;
 
     type GetGameHighScores: Request<Payload = GetGameHighScores, Err = Self::Err>;
 
     /// For Telegram documentation see [`GetGameHighScores`].
-    fn get_game_high_scores<T>(&self, user_id: i64, target: T) -> Self::GetGameHighScores
-    where
-        T: Into<TargetMessage>;
+    fn get_game_high_scores(&self, user_id: i64, target: TargetMessage) -> Self::GetGameHighScores;
 }
 
 macro_rules! fty {

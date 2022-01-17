@@ -18,9 +18,9 @@ impl_payload! {
     pub RevokeChatInviteLink (RevokeChatInviteLinkSetters) => String {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// The invite link to revoke
-            pub invite_link: String [into],
+            pub invite_link: String,
         }
     }
 }

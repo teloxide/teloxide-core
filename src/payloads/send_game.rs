@@ -20,7 +20,7 @@ impl_payload! {
             /// Unique identifier for the target chat
             pub chat_id: u32,
             /// Short name of the game, serves as the unique identifier for the game. Set up your games via Botfather.
-            pub game_short_name: String [into],
+            pub game_short_name: String,
         }
         optional {
             /// Sends the message [silently]. Users will receive a notification with no sound.
@@ -36,7 +36,7 @@ impl_payload! {
             /// A JSON-serialized object for an [inline keyboard]. If empty, one 'Play game_title' button will be shown. If not empty, the first button must launch the game.
             ///
             /// [inline keyboard]: https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating
-            pub reply_markup: ReplyMarkup [into],
+            pub reply_markup: ReplyMarkup,
         }
     }
 }

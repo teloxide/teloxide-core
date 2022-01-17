@@ -19,21 +19,21 @@ impl_payload! {
     pub SendInvoice (SendInvoiceSetters) => Message {
         required {
             /// Unique identifier for the target private chat
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Product name, 1-32 characters
-            pub title: String [into],
+            pub title: String,
             /// Product description, 1-255 characters
-            pub description: String [into],
+            pub description: String,
             /// Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
-            pub payload: String [into],
+            pub payload: String,
             /// Payments provider token, obtained via [Botfather]
             ///
             /// [Botfather]: https://t.me/botfather
-            pub provider_token: String [into],
+            pub provider_token: String,
             /// Three-letter ISO 4217 currency code, see more on currencies
-            pub currency: String [into],
+            pub currency: String,
             /// Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)
-            pub prices: Vec<LabeledPrice> [collect],
+            pub prices: Vec<LabeledPrice>,
         }
         optional {
             /// The maximum accepted amount for tips in the smallest units of the currency (integer, **not** float/double). For example, for a maximum tip of `US$ 1.45` pass `max_tip_amount = 145`. See the exp parameter in [`currencies.json`], it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0
@@ -41,19 +41,19 @@ impl_payload! {
             /// [`currencies.json`]: https://core.telegram.org/bots/payments/currencies.json
             pub max_tip_amount: u32,
             /// A JSON-serialized array of suggested amounts of tips in the smallest units of the currency (integer, **not** float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed _max_tip_amount_.
-            pub suggested_tip_amounts: Vec<u32> [collect],
+            pub suggested_tip_amounts: Vec<u32>,
             /// Unique deep-linking parameter. If left empty, **forwarded copies** of the sent message will have a Pay button, allowing multiple users to pay directly from the forwarded message, using the same invoice. If non-empty, forwarded copies of the sent message will have a URL button with a deep link to the bot (instead of a Pay button), with the value used as the start parameter
-            pub start_parameter: String [into],
+            pub start_parameter: String,
             /// A JSON-serialized data about the invoice, which will be shared with the payment provider. A detailed description of required fields should be provided by the payment provider.
-            pub provider_data: String [into],
+            pub provider_data: String,
             /// URL of the product photo for the invoice. Can be a photo of the goods or a marketing image for a service. People like it better when they see what they are paying for.
             pub photo_url: Url,
             /// Photo size
-            pub photo_size: String [into],
+            pub photo_size: String,
             /// Photo width
-            pub photo_width: String [into],
+            pub photo_width: String,
             /// Photo height
-            pub photo_height: String [into],
+            pub photo_height: String,
             /// Pass _True_, if you require the user's full name to complete the order
             pub need_name: bool,
             /// Pass _True_, if you require the user's phone number to complete the order

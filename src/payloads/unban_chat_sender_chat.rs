@@ -16,7 +16,7 @@ impl_payload! {
     pub UnbanChatSenderChat (UnbanChatSenderChatSetters) => True {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// Unique identifier of the target sender chat
             pub sender_chat_id: i64,
         }

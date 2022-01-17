@@ -16,7 +16,7 @@ impl_payload! {
     pub DeleteStickerFromSet (DeleteStickerFromSetSetters) => True {
         required {
             /// File identifier of the sticker
-            pub sticker: String [into],
+            pub sticker: String,
         }
     }
 }

@@ -22,7 +22,7 @@ impl_payload! {
             /// New score
             pub score: u64,
             /// Identifier of the inline message
-            pub inline_message_id: String [into],
+            pub inline_message_id: String,
         }
         optional {
             /// Pass True, if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters

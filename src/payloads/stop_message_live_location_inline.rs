@@ -20,7 +20,7 @@ impl_payload! {
     pub StopMessageLiveLocationInline (StopMessageLiveLocationInlineSetters) => Message {
         required {
             /// Identifier of the inline message
-            pub inline_message_id: String [into],
+            pub inline_message_id: String,
             /// Latitude of new location
             pub latitude: f64,
             /// Longitude of new location
@@ -31,7 +31,7 @@ impl_payload! {
             ///
             /// [inline keyboard]: https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating
             /// [custom reply keyboard]: https://core.telegram.org/bots#keyboards
-            pub reply_markup: ReplyMarkup [into],
+            pub reply_markup: ReplyMarkup,
         }
     }
 }

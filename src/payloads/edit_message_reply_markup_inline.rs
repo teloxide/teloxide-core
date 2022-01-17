@@ -18,7 +18,7 @@ impl_payload! {
     pub EditMessageReplyMarkupInline (EditMessageReplyMarkupInlineSetters) => True {
         required {
             /// Identifier of the inline message
-            pub inline_message_id: String [into],
+            pub inline_message_id: String,
         }
         optional {
             /// A JSON-serialized object for an [inline keyboard].

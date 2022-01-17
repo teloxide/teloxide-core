@@ -18,9 +18,9 @@ impl_payload! {
     pub SendMediaGroup (SendMediaGroupSetters) => Vec<Message> {
         required {
             /// Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
-            pub chat_id: ChatId [into],
+            pub chat_id: ChatId,
             /// A JSON-serialized array describing messages to be sent, must include 2-10 items
-            pub media: Vec<InputMedia> [collect],
+            pub media: Vec<InputMedia>,
         }
         optional {
             /// Sends the message [silently]. Users will receive a notification with no sound.
