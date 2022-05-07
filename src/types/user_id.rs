@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 /// Identifier of a user.
 #[derive(Clone, Copy)]
-#[derive(Debug, derive_more::Display)]
+#[derive(Debug, derive_more::Display, derive_more::From)]
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[derive(Serialize, Deserialize)]
 #[serde(transparent)]
