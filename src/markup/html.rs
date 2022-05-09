@@ -36,7 +36,7 @@ impl Markup for Html {
         )
     }
 
-    fn user_mention(&self, user_id: UserId, text: &str) -> String {
+    fn user_mention(&self, text: &str, user_id: UserId) -> String {
         // FIXME: use user_id.url()
         self.link(text, format!("tg://user?id={user_id}").parse().unwrap())
     }
@@ -134,7 +134,7 @@ mod tests {
     #[test]
     fn test_user_mention() {
         assert_eq!(
-            Html.user_mention(UserId(123_456_789), "<pwner666>"),
+            Html.user_mention("<pwner666>", UserId(123_456_789)),
             "<a href=\"tg://user?id=123456789\">&lt;pwner666&gt;</a>",
         );
     }

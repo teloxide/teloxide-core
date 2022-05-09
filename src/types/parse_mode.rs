@@ -226,11 +226,11 @@ impl Markup for ParseMode {
         }
     }
 
-    fn user_mention(&self, user_id: UserId, text: &str) -> String {
+    fn user_mention(&self, text: &str, user_id: UserId) -> String {
         match self {
-            Self::MarkdownV2 => MarkdownV2.user_mention(user_id, text),
-            Self::Html => Html.user_mention(user_id, text),
-            Self::Markdown => MarkdownV2.user_mention(user_id, text), // "best effort"
+            Self::MarkdownV2 => MarkdownV2.user_mention(text, user_id),
+            Self::Html => Html.user_mention(text, user_id),
+            Self::Markdown => MarkdownV2.user_mention(text, user_id), // "best effort"
         }
     }
 

@@ -41,7 +41,7 @@ pub trait Markup {
     fn link(&self, text: &str, url: Url) -> String;
 
     /// Builds an inline user mention link with an anchor.
-    fn user_mention(&self, user_id: UserId, text: &str) -> String;
+    fn user_mention(&self, text: &str, user_id: UserId) -> String;
 
     fn user_mention_or_link(&self, user: &User) -> String;
 
