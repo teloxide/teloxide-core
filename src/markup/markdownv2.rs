@@ -1,135 +1,102 @@
-//! Utils for working with the [Markdown V2 message style][spec].
-//!
-//! [spec]: https://core.telegram.org/bots/api#markdownv2-style
-
-use crate::types::{User, UserId};
+use crate::{
+    markup::Markup,
+    types::{User, UserId},
+};
 use reqwest::Url;
 
-/// Applies the **bold** font style to the string.
+/// Allows formatting text according "MarkdownV2" Telegram markup language. See
+/// [specification].
 ///
-/// Passed string will not be automatically escaped because it can contain
-/// nested markup.
-pub fn bold(s: &str) -> String {
-    format!("*{}*", s)
-}
+/// [specification]: https://core.telegram.org/bots/api#markdownv2-style
+pub struct MarkdownV2;
 
-/// Applies the _italic_ font style to the string.
-///
-/// Can be safely used with [`underline`].
-///
-/// Passed string will not be automatically escaped because it can contain
-/// nested markup.
-pub fn italic(s: &str) -> String {
-    if s.starts_with("__") && s.ends_with("__") {
-        format!(r"_{}\r__", &s[..s.len() - 1])
-    } else {
-        format!("_{}_", s)
+impl Markup for MarkdownV2 {
+    fn bold(&self, s: &str) -> String {
+        format!("*{}*", s)
     }
-}
 
-/// Applies the underline font style to the string.
-///
-/// Can be safely used with [`italic`].
-///
-/// Passed string will not be automatically escaped because it can contain
-/// nested markup.
-pub fn underline(s: &str) -> String {
-    // In case of ambiguity between italic and underline entities
-    // ‘__’ is always greedily treated from left to right as beginning or end of
-    // underline entity, so instead of ___italic underline___ we should use
-    // ___italic underline_\r__, where \r is a character with code 13, which
-    // will be ignored.
-    if s.starts_with('_') && s.ends_with('_') {
-        format!(r"__{}\r__", s)
-    } else {
-        format!("__{}__", s)
+    fn italic(&self, s: &str) -> String {
+        if s.starts_with("__") && s.ends_with("__") {
+            format!(r"_{}\r__", &s[..s.len() - 1])
+        } else {
+            format!("_{}_", s)
+        }
     }
-}
 
-/// Applies the ~~strikethrough~~ font style to the string.
-///
-/// Passed string will not be automatically escaped because it can contain
-/// nested markup.
-pub fn strikethrough(s: &str) -> String {
-    format!("~{}~", s)
-}
+    fn underline(&self, s: &str) -> String {
+        // In case of ambiguity between italic and underline entities
+        // ‘__’ is always greedily treated from left to right as beginning or end of
+        // underline entity, so instead of ___italic underline___ we should use
+        // ___italic underline_\r__, where \r is a character with code 13, which
+        // will be ignored.
+        if s.starts_with('_') && s.ends_with('_') {
+            format!(r"__{}\r__", s)
+        } else {
+            format!("__{}__", s)
+        }
+    }
 
-/// Builds an inline link with an anchor.
-///
-/// Escapes `)` and ``` characters inside the link url.
-pub fn link(text: &str, url: Url) -> String {
-    format!("[{}]({})", text, escape_link_url(url.as_str()))
-}
+    fn strikethrough(&self, s: &str) -> String {
+        format!("~{}~", s)
+    }
 
-/// Builds an inline user mention link with an anchor.
-pub fn user_mention(user_id: UserId, text: &str) -> String {
-    // FIXME: use user_id.url()
-    link(text, format!("tg://user?id={}", user_id).parse().unwrap())
-}
+    fn link(&self, text: &str, url: Url) -> String {
+        // FIXME: can't ] in the `text` break the formatting? :thinking:
+        format!("[{}]({})", text, self.escape_link_url(url))
+    }
 
-/// Formats the code block.
-///
-/// Escapes ``` and `\` characters inside the block.
-pub fn code_block(code: &str) -> String {
-    format!("```\n{}\n```", escape_code(code))
-}
+    fn user_mention(&self, user_id: UserId, text: &str) -> String {
+        // FIXME: use user_id.url()
+        self.link(text, format!("tg://user?id={}", user_id).parse().unwrap())
+    }
 
-/// Formats the code block with a specific language syntax.
-///
-/// Escapes ``` and `\` characters inside the block.
-pub fn code_block_with_lang(code: &str, lang: &str) -> String {
-    format!("```{}\n{}\n```", escape(lang), escape_code(code))
-}
+    fn user_mention_or_link(&self, user: &User) -> String {
+        match user.mention() {
+            Some(mention) => mention,
+            None => self.link(&user.full_name(), user.url()),
+        }
+    }
 
-/// Formats the string as an inline code.
-///
-/// Escapes ``` and `\` characters inside the block.
-pub fn code_inline(s: &str) -> String {
-    format!("`{}`", escape_code(s))
-}
+    fn code_block(&self, code: &str) -> String {
+        format!("```\n{}\n```", self.escape_code(code))
+    }
 
-/// Escapes the string to be shown "as is" within the Telegram [Markdown
-/// v2][spec] message style.
-///
-/// [spec]: https://core.telegram.org/bots/api#html-style
-pub fn escape(s: &str) -> String {
-    // FIXME: do not do this hell
-    s.replace('_', r"\_")
-        .replace('*', r"\*")
-        .replace('[', r"\[")
-        .replace(']', r"\]")
-        .replace('(', r"\(")
-        .replace(')', r"\)")
-        .replace('~', r"\~")
-        .replace('`', r"\`")
-        .replace('>', r"\>")
-        .replace('#', r"\#")
-        .replace('+', r"\+")
-        .replace('-', r"\-")
-        .replace('=', r"\=")
-        .replace('|', r"\|")
-        .replace('{', r"\{")
-        .replace('}', r"\}")
-        .replace('.', r"\.")
-        .replace('!', r"\!")
-}
+    fn code_block_with_lang(&self, code: &str, lang: &str) -> String {
+        format!("```{}\n{}\n```", self.escape(lang), self.escape_code(code))
+    }
 
-/// Escapes all markdown special characters specific for the inline link URL
-/// (``` and `)`).
-pub fn escape_link_url(s: &str) -> String {
-    s.replace('`', r"\`").replace(')', r"\)")
-}
+    fn code_inline(&self, s: &str) -> String {
+        format!("`{}`", self.escape_code(s))
+    }
 
-/// Escapes all markdown special characters specific for the code block (``` and
-/// `\`).
-pub fn escape_code(s: &str) -> String {
-    s.replace('\\', r"\\").replace('`', r"\`")
-}
+    fn escape(&self, s: &str) -> String {
+        // FIXME: do not do this hell
+        s.replace('_', r"\_")
+            .replace('*', r"\*")
+            .replace('[', r"\[")
+            .replace(']', r"\]")
+            .replace('(', r"\(")
+            .replace(')', r"\)")
+            .replace('~', r"\~")
+            .replace('`', r"\`")
+            .replace('>', r"\>")
+            .replace('#', r"\#")
+            .replace('+', r"\+")
+            .replace('-', r"\-")
+            .replace('=', r"\=")
+            .replace('|', r"\|")
+            .replace('{', r"\{")
+            .replace('}', r"\}")
+            .replace('.', r"\.")
+            .replace('!', r"\!")
+    }
 
-pub fn user_mention_or_link(user: &User) -> String {
-    match user.mention() {
-        Some(mention) => mention,
-        None => link(&user.full_name(), user.url()),
+    fn escape_link_url(&self, u: Url) -> String {
+        u.as_str().replace('`', r"\`").replace(')', r"\)")
+    }
+
+    fn escape_code(&self, s: &str) -> String {
+        s.replace('\\', r"\\").replace('`', r"\`")
     }
 }
 
@@ -140,42 +107,48 @@ mod tests {
 
     #[test]
     fn test_bold() {
-        assert_eq!(bold(" foobar "), "* foobar *");
-        assert_eq!(bold(" _foobar_ "), "* _foobar_ *");
-        assert_eq!(bold("~(`foobar`)~"), "*~(`foobar`)~*");
+        assert_eq!(MarkdownV2.bold(" foobar "), "* foobar *");
+        assert_eq!(MarkdownV2.bold(" _foobar_ "), "* _foobar_ *");
+        assert_eq!(MarkdownV2.bold("~(`foobar`)~"), "*~(`foobar`)~*");
     }
 
     #[test]
     fn test_italic() {
-        assert_eq!(italic(" foobar "), "_ foobar _");
-        assert_eq!(italic("*foobar*"), "_*foobar*_");
-        assert_eq!(italic("~(foobar)~"), "_~(foobar)~_");
+        assert_eq!(MarkdownV2.italic(" foobar "), "_ foobar _");
+        assert_eq!(MarkdownV2.italic("*foobar*"), "_*foobar*_");
+        assert_eq!(MarkdownV2.italic("~(foobar)~"), "_~(foobar)~_");
     }
 
     #[test]
     fn test_underline() {
-        assert_eq!(underline(" foobar "), "__ foobar __");
-        assert_eq!(underline("*foobar*"), "__*foobar*__");
-        assert_eq!(underline("~(foobar)~"), "__~(foobar)~__");
+        assert_eq!(MarkdownV2.underline(" foobar "), "__ foobar __");
+        assert_eq!(MarkdownV2.underline("*foobar*"), "__*foobar*__");
+        assert_eq!(MarkdownV2.underline("~(foobar)~"), "__~(foobar)~__");
     }
 
     #[test]
     fn test_strike() {
-        assert_eq!(strikethrough(" foobar "), "~ foobar ~");
-        assert_eq!(strikethrough("*foobar*"), "~*foobar*~");
-        assert_eq!(strikethrough("*(foobar)*"), "~*(foobar)*~");
+        assert_eq!(MarkdownV2.strikethrough(" foobar "), "~ foobar ~");
+        assert_eq!(MarkdownV2.strikethrough("*foobar*"), "~*foobar*~");
+        assert_eq!(MarkdownV2.strikethrough("*(foobar)*"), "~*(foobar)*~");
     }
 
     #[test]
     fn test_italic_with_underline() {
-        assert_eq!(underline(italic("foobar").as_str()), r"___foobar_\r__");
-        assert_eq!(italic(underline("foobar").as_str()), r"___foobar_\r__");
+        assert_eq!(
+            MarkdownV2.underline(MarkdownV2.italic("foobar").as_str()),
+            r"___foobar_\r__"
+        );
+        assert_eq!(
+            MarkdownV2.italic(MarkdownV2.underline("foobar").as_str()),
+            r"___foobar_\r__"
+        );
     }
 
     #[test]
     fn test_link() {
         assert_eq!(
-            link(
+            MarkdownV2.link(
                 "google",
                 "https://www.google.com?q=(%60foobar%60)".parse().unwrap(),
             ),
@@ -186,7 +159,7 @@ mod tests {
     #[test]
     fn test_user_mention() {
         assert_eq!(
-            user_mention(UserId(123_456_789), "pwner666"),
+            MarkdownV2.user_mention(UserId(123_456_789), "pwner666"),
             "[pwner666](tg://user?id=123456789)"
         );
     }
@@ -194,7 +167,7 @@ mod tests {
     #[test]
     fn test_code_block() {
         assert_eq!(
-            code_block("pre-'formatted'\nfixed-width \\code `block`"),
+            MarkdownV2.code_block("pre-'formatted'\nfixed-width \\code `block`"),
             "```\npre-'formatted'\nfixed-width \\\\code \\`block\\`\n```"
         );
     }
@@ -202,7 +175,8 @@ mod tests {
     #[test]
     fn test_code_block_with_lang() {
         assert_eq!(
-            code_block_with_lang("pre-'formatted'\nfixed-width \\code `block`", "[python]"),
+            MarkdownV2
+                .code_block_with_lang("pre-'formatted'\nfixed-width \\code `block`", "[python]"),
             "```\\[python\\]\npre-'formatted'\nfixed-width \\\\code \\`block\\`\n```"
         );
     }
@@ -210,21 +184,24 @@ mod tests {
     #[test]
     fn test_code_inline() {
         assert_eq!(
-            code_inline(" let x = (1, 2, 3); "),
+            MarkdownV2.code_inline(" let x = (1, 2, 3); "),
             "` let x = (1, 2, 3); `"
         );
-        assert_eq!(code_inline("<html>foo</html>"), "`<html>foo</html>`");
         assert_eq!(
-            code_inline(r" `(code inside code \ )` "),
+            MarkdownV2.code_inline("<html>foo</html>"),
+            "`<html>foo</html>`"
+        );
+        assert_eq!(
+            MarkdownV2.code_inline(r" `(code inside code \ )` "),
             r"` \`(code inside code \\ )\` `"
         );
     }
 
     #[test]
     fn test_escape() {
-        assert_eq!(escape("* foobar *"), r"\* foobar \*");
+        assert_eq!(MarkdownV2.escape("* foobar *"), r"\* foobar \*");
         assert_eq!(
-            escape(r"_ * [ ] ( ) ~ \ ` > # + - = | { } . !"),
+            MarkdownV2.escape(r"_ * [ ] ( ) ~ \ ` > # + - = | { } . !"),
             r"\_ \* \[ \] \( \) \~ \ \` \> \# \+ \- \= \| \{ \} \. \!",
         );
     }
@@ -232,26 +209,33 @@ mod tests {
     #[test]
     fn test_escape_link_url() {
         assert_eq!(
-            escape_link_url(r"https://en.wikipedia.org/wiki/Development+(Software)"),
+            MarkdownV2.escape_link_url(
+                r"https://en.wikipedia.org/wiki/Development+(Software)"
+                    .parse()
+                    .unwrap()
+            ),
             r"https://en.wikipedia.org/wiki/Development+(Software\)"
         );
         assert_eq!(
-            escape_link_url(r"https://en.wikipedia.org/wiki/`"),
-            r"https://en.wikipedia.org/wiki/\`"
+            MarkdownV2.escape_link_url(r"https://en.wikipedia.org/wiki/`".parse().unwrap()),
+            r"https://en.wikipedia.org/wiki/%60"
         );
         assert_eq!(
-            escape_link_url(r"_*[]()~`#+-=|{}.!\"),
-            r"_*[](\)~\`#+-=|{}.!\"
+            MarkdownV2.escape_link_url(r"https://example.com/_*[]()~`#+-=|{}.!\".parse().unwrap()),
+            r"https://example.com/_*[](\)~%60#+-=|{}.!\"
         );
     }
 
     #[test]
     fn test_escape_code() {
         assert_eq!(
-            escape_code(r"` \code inside the code\ `"),
+            MarkdownV2.escape_code(r"` \code inside the code\ `"),
             r"\` \\code inside the code\\ \`"
         );
-        assert_eq!(escape_code(r"_*[]()~`#+-=|{}.!\"), r"_*[]()~\`#+-=|{}.!\\");
+        assert_eq!(
+            MarkdownV2.escape_code(r"_*[]()~`#+-=|{}.!\"),
+            r"_*[]()~\`#+-=|{}.!\\"
+        );
     }
 
     #[test]
@@ -264,7 +248,10 @@ mod tests {
             username: Some("abcd".to_string()),
             language_code: None,
         };
-        assert_eq!(user_mention_or_link(&user_with_username), "@abcd");
+        assert_eq!(
+            MarkdownV2.user_mention_or_link(&user_with_username),
+            "@abcd"
+        );
         let user_without_username = User {
             id: UserId(123_456_789),
             is_bot: false,
@@ -274,7 +261,7 @@ mod tests {
             language_code: None,
         };
         assert_eq!(
-            user_mention_or_link(&user_without_username),
+            MarkdownV2.user_mention_or_link(&user_without_username),
             r#"[Name](tg://user/?id=123456789)"#
         )
     }
