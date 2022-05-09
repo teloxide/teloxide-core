@@ -19,7 +19,7 @@ impl Markup for MarkdownV2 {
         if s.starts_with("__") && s.ends_with("__") {
             format!(r"_{}\r__", &s[..s.len() - 1])
         } else {
-            format!("_{}_", s)
+            format!("_{s}_")
         }
     }
 
@@ -30,24 +30,25 @@ impl Markup for MarkdownV2 {
         // ___italic underline_\r__, where \r is a character with code 13, which
         // will be ignored.
         if s.starts_with('_') && s.ends_with('_') {
-            format!(r"__{}\r__", s)
+            format!(r"__{s}\r__")
         } else {
-            format!("__{}__", s)
+            format!("__{s}__")
         }
     }
 
     fn strikethrough(&self, s: &str) -> String {
-        format!("~{}~", s)
+        format!("~{s}~")
     }
 
     fn link(&self, text: &str, url: Url) -> String {
+        let url = self.escape_link_url(url);
+
         // FIXME: can't ] in the `text` break the formatting? :thinking:
-        format!("[{}]({})", text, self.escape_link_url(url))
+        format!("[{text}]({url})")
     }
 
     fn user_mention(&self, text: &str, user_id: UserId) -> String {
-        // FIXME: use user_id.url()
-        self.link(text, format!("tg://user?id={}", user_id).parse().unwrap())
+        self.link(text, user_id.url())
     }
 
     fn user_mention_or_link(&self, user: &User) -> String {
@@ -58,15 +59,22 @@ impl Markup for MarkdownV2 {
     }
 
     fn code_block(&self, code: &str) -> String {
-        format!("```\n{}\n```", self.escape_code(code))
+        let code = self.escape_code(code);
+
+        format!("```\n{code}\n```")
     }
 
     fn code_block_with_lang(&self, code: &str, lang: &str) -> String {
-        format!("```{}\n{}\n```", self.escape(lang), self.escape_code(code))
+        let code = self.escape_code(code);
+        let lang = self.escape(lang);
+
+        format!("```{lang}\n{code}\n```")
     }
 
     fn code_inline(&self, s: &str) -> String {
-        format!("`{}`", self.escape_code(s))
+        let s = self.escape_code(s);
+
+        format!("`{s}`")
     }
 
     fn escape(&self, s: &str) -> String {

@@ -29,16 +29,14 @@ impl Markup for Html {
     }
 
     fn link(&self, text: &str, url: Url) -> String {
-        format!(
-            "<a href=\"{}\">{}</a>",
-            self.escape(url.as_str()),
-            self.escape(text)
-        )
+        let text = self.escape(text);
+        let url = self.escape(url.as_str());
+
+        format!("<a href=\"{url}\">{text}</a>")
     }
 
     fn user_mention(&self, text: &str, user_id: UserId) -> String {
-        // FIXME: use user_id.url()
-        self.link(text, format!("tg://user?id={user_id}").parse().unwrap())
+        self.link(text, user_id.url())
     }
 
     fn user_mention_or_link(&self, user: &User) -> String {
@@ -49,19 +47,22 @@ impl Markup for Html {
     }
 
     fn code_block(&self, code: &str) -> String {
-        format!("<pre>{}</pre>", self.escape(code))
+        let code = self.escape(code);
+
+        format!("<pre>{code}</pre>")
     }
 
     fn code_block_with_lang(&self, code: &str, lang: &str) -> String {
-        format!(
-            "<pre><code class=\"language-{}\">{}</code></pre>",
-            self.escape(lang).replace('"', "&quot;"),
-            self.escape(code)
-        )
+        let language = self.escape(lang).replace('"', "&quot;");
+        let code = self.escape(code);
+
+        format!("<pre><code class=\"language-{language}\">{code}</code></pre>")
     }
 
     fn code_inline(&self, s: &str) -> String {
-        format!("<code>{}</code>", self.escape(s))
+        let s = self.escape(s);
+
+        format!("<code>{s}</code>")
     }
 
     fn escape(&self, s: &str) -> String {
