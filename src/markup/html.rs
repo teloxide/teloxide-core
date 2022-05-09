@@ -136,7 +136,7 @@ mod tests {
     fn test_user_mention() {
         assert_eq!(
             Html.user_mention("<pwner666>", UserId(123_456_789)),
-            "<a href=\"tg://user?id=123456789\">&lt;pwner666&gt;</a>",
+            "<a href=\"tg://user/?id=123456789\">&lt;pwner666&gt;</a>",
         );
     }
 

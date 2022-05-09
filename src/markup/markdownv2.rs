@@ -168,7 +168,7 @@ mod tests {
     fn test_user_mention() {
         assert_eq!(
             MarkdownV2.user_mention("pwner666", UserId(123_456_789)),
-            "[pwner666](tg://user?id=123456789)"
+            "[pwner666](tg://user/?id=123456789)"
         );
     }
 
