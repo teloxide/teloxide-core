@@ -9,6 +9,11 @@ use std::{
 
 use serde::{Deserialize, Serialize};
 
+use crate::{
+    markup::{Html, MarkdownV2, Markup},
+    types::{User, UserId},
+};
+
 /// Formatting options.
 ///
 /// The Bot API supports basic formatting for messages. You can use bold,
@@ -177,6 +182,112 @@ impl FromStr for ParseMode {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         s.try_into()
+    }
+}
+
+impl Markup for ParseMode {
+    fn bold(&self, s: &str) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.bold(s),
+            Self::Html => Html.bold(s),
+            Self::Markdown => MarkdownV2.bold(s), // "best effort"
+        }
+    }
+
+    fn italic(&self, s: &str) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.italic(s),
+            Self::Html => Html.italic(s),
+            Self::Markdown => MarkdownV2.italic(s), // "best effort"
+        }
+    }
+
+    fn underline(&self, s: &str) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.underline(s),
+            Self::Html => Html.underline(s),
+            Self::Markdown => MarkdownV2.underline(s), // "best effort"
+        }
+    }
+
+    fn strikethrough(&self, s: &str) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.strikethrough(s),
+            Self::Html => Html.strikethrough(s),
+            Self::Markdown => MarkdownV2.strikethrough(s), // "best effort"
+        }
+    }
+
+    fn link(&self, text: &str, url: reqwest::Url) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.link(text, url),
+            Self::Html => Html.link(text, url),
+            Self::Markdown => MarkdownV2.link(text, url), // "best effort"
+        }
+    }
+
+    fn user_mention(&self, user_id: UserId, text: &str) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.user_mention(user_id, text),
+            Self::Html => Html.user_mention(user_id, text),
+            Self::Markdown => MarkdownV2.user_mention(user_id, text), // "best effort"
+        }
+    }
+
+    fn user_mention_or_link(&self, user: &User) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.user_mention_or_link(user),
+            Self::Html => Html.user_mention_or_link(user),
+            Self::Markdown => MarkdownV2.user_mention_or_link(user), // "best effort"
+        }
+    }
+
+    fn code_block(&self, code: &str) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.code_block(code),
+            Self::Html => Html.code_block(code),
+            Self::Markdown => MarkdownV2.code_block(code), // "best effort"
+        }
+    }
+
+    fn code_block_with_lang(&self, code: &str, lang: &str) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.code_block_with_lang(code, lang),
+            Self::Html => Html.code_block_with_lang(code, lang),
+            Self::Markdown => MarkdownV2.code_block_with_lang(code, lang), // "best effort"
+        }
+    }
+
+    fn code_inline(&self, s: &str) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.code_inline(s),
+            Self::Html => Html.code_inline(s),
+            Self::Markdown => MarkdownV2.code_inline(s), // "best effort"
+        }
+    }
+
+    fn escape(&self, s: &str) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.escape(s),
+            Self::Html => Html.escape(s),
+            Self::Markdown => MarkdownV2.escape(s), // "best effort"
+        }
+    }
+
+    fn escape_link_url(&self, u: reqwest::Url) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.escape_link_url(u),
+            Self::Html => Html.escape_link_url(u),
+            Self::Markdown => MarkdownV2.escape_link_url(u), // "best effort"
+        }
+    }
+
+    fn escape_code(&self, s: &str) -> String {
+        match self {
+            Self::MarkdownV2 => MarkdownV2.escape_code(s),
+            Self::Html => Html.escape_code(s),
+            Self::Markdown => MarkdownV2.escape_code(s), // "best effort"
+        }
     }
 }
 
