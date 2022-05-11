@@ -221,6 +221,7 @@ mod encrypted_passport_element;
 mod passport_data;
 mod passport_element_error;
 mod passport_file;
+mod with_entities;
 
 pub use non_telegram_types::{country_code::*, currency::*, until_date::*};
 mod non_telegram_types {
