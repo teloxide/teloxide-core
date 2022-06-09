@@ -2,6 +2,8 @@ use crate::{
     markup::Markup,
     types::{User, UserId},
 };
+use aho_corasick::{AhoCorasick, Match};
+use once_cell::sync::Lazy;
 use reqwest::Url;
 
 /// Allows formatting text according "MarkdownV2" Telegram markup language. See
@@ -78,34 +80,47 @@ impl Markup for MarkdownV2 {
     }
 
     fn escape(&self, s: &str) -> String {
-        // FIXME: do not do this hell
-        s.replace('_', r"\_")
-            .replace('*', r"\*")
-            .replace('[', r"\[")
-            .replace(']', r"\]")
-            .replace('(', r"\(")
-            .replace(')', r"\)")
-            .replace('~', r"\~")
-            .replace('`', r"\`")
-            .replace('>', r"\>")
-            .replace('#', r"\#")
-            .replace('+', r"\+")
-            .replace('-', r"\-")
-            .replace('=', r"\=")
-            .replace('|', r"\|")
-            .replace('{', r"\{")
-            .replace('}', r"\}")
-            .replace('.', r"\.")
-            .replace('!', r"\!")
+        static SEARCHER: Lazy<AhoCorasick> = Lazy::new(|| {
+            AhoCorasick::new_auto_configured(&[
+                "_", "*", "[", "]", "(", ")", "~", "`", ">", "#", "+", "-", "=", "|", "{", "}",
+                ".", "!",
+            ])
+        });
+
+        let mut dst = String::with_capacity(s.len());
+        SEARCHER.replace_all_with(s, &mut dst, precede_with_back_slash);
+
+        dst
     }
 
     fn escape_link_url(&self, u: Url) -> String {
-        u.as_str().replace('`', r"\`").replace(')', r"\)")
+        let s = u.as_str();
+
+        static SEARCHER: Lazy<AhoCorasick> =
+            Lazy::new(|| AhoCorasick::new_auto_configured(&["`", ")"]));
+
+        let mut dst = String::with_capacity(s.len());
+        SEARCHER.replace_all_with(s, &mut dst, precede_with_back_slash);
+
+        dst
     }
 
     fn escape_code(&self, s: &str) -> String {
-        s.replace('\\', r"\\").replace('`', r"\`")
+        static SEARCHER: Lazy<AhoCorasick> =
+            Lazy::new(|| AhoCorasick::new_auto_configured(&[r"\", "`"]));
+
+        let mut dst = String::with_capacity(s.len());
+        SEARCHER.replace_all_with(s, &mut dst, precede_with_back_slash);
+
+        dst
     }
+}
+
+fn precede_with_back_slash(_: &Match, replaced: &str, dst: &mut String) -> bool {
+    dst.push('\\');
+    dst.push_str(replaced);
+
+    true
 }
 
 #[cfg(test)]

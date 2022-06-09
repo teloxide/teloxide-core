@@ -1,3 +1,5 @@
+use aho_corasick::{AhoCorasick, Match};
+use once_cell::sync::Lazy;
 use reqwest::Url;
 
 use crate::{
@@ -53,7 +55,12 @@ impl Markup for Html {
     }
 
     fn code_block_with_lang(&self, code: &str, lang: &str) -> String {
-        let language = self.escape(lang).replace('"', "&quot;");
+        static SEARCHER: Lazy<AhoCorasick> =
+            Lazy::new(|| AhoCorasick::new_auto_configured(&["&", "<", ">", "\""]));
+
+        let mut language = String::with_capacity(lang.len());
+        SEARCHER.replace_all_with(lang, &mut language, html_replacement);
+
         let code = self.escape(code);
 
         format!("<pre><code class=\"language-{language}\">{code}</code></pre>")
@@ -66,9 +73,13 @@ impl Markup for Html {
     }
 
     fn escape(&self, s: &str) -> String {
-        s.replace('&', "&amp;")
-            .replace('<', "&lt;")
-            .replace('>', "&gt;")
+        static SEARCHER: Lazy<AhoCorasick> =
+            Lazy::new(|| AhoCorasick::new_auto_configured(&["&", "<", ">"]));
+
+        let mut dst = String::with_capacity(s.len());
+        SEARCHER.replace_all_with(s, &mut dst, html_replacement);
+
+        dst
     }
 
     fn escape_link_url(&self, u: Url) -> String {
@@ -78,6 +89,20 @@ impl Markup for Html {
     fn escape_code(&self, s: &str) -> String {
         self.escape(s)
     }
+}
+
+fn html_replacement(mat: &Match, _: &str, dst: &mut String) -> bool {
+    let replacement = match mat.pattern() {
+        0 => "&amp;",
+        1 => "&lt;",
+        2 => "&gt;",
+        3 => "&quot;",
+        _ => "unreachable",
+    };
+
+    dst.push_str(replacement);
+
+    true
 }
 
 #[cfg(test)]
