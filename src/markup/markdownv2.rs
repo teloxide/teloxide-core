@@ -45,7 +45,6 @@ impl Markup for MarkdownV2 {
     fn link(&self, text: &str, url: Url) -> String {
         let url = self.escape_link_url(url);
 
-        // FIXME: can't ] in the `text` break the formatting? :thinking:
         format!("[{text}]({url})")
     }
 
