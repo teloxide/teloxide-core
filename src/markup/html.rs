@@ -55,12 +55,7 @@ impl Markup for Html {
     }
 
     fn code_block_with_lang(&self, code: &str, lang: &str) -> String {
-        static SEARCHER: Lazy<AhoCorasick> =
-            Lazy::new(|| AhoCorasick::new_auto_configured(&["&", "<", ">", "\""]));
-
-        let mut language = String::with_capacity(lang.len());
-        SEARCHER.replace_all_with(lang, &mut language, html_replacement);
-
+        let language = self.escape(lang);
         let code = self.escape(code);
 
         format!("<pre><code class=\"language-{language}\">{code}</code></pre>")
@@ -74,7 +69,7 @@ impl Markup for Html {
 
     fn escape(&self, s: &str) -> String {
         static SEARCHER: Lazy<AhoCorasick> =
-            Lazy::new(|| AhoCorasick::new_auto_configured(&["&", "<", ">"]));
+            Lazy::new(|| AhoCorasick::new_auto_configured(&["&", "<", ">", "\""]));
 
         let mut dst = String::with_capacity(s.len());
         SEARCHER.replace_all_with(s, &mut dst, html_replacement);
@@ -192,7 +187,7 @@ mod tests {
     fn test_code_inline() {
         assert_eq!(
             Html.code_inline("<span class=\"foo\">foo & bar</span>"),
-            "<code>&lt;span class=\"foo\"&gt;foo &amp; bar&lt;/span&gt;</code>",
+            "<code>&lt;span class=&quot;foo&quot;&gt;foo &amp; bar&lt;/span&gt;</code>",
         );
     }
 
@@ -206,7 +201,7 @@ mod tests {
             Html.escape("<p>你好 & 再見</p>"),
             "&lt;p&gt;你好 &amp; 再見&lt;/p&gt;"
         );
-        assert_eq!(Html.escape("'foo\""), "'foo\"");
+        assert_eq!(Html.escape("'foo\""), "'foo&quot;");
     }
 
     #[test]
