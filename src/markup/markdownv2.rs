@@ -81,8 +81,8 @@ impl Markup for MarkdownV2 {
     fn escape(&self, s: &str) -> String {
         static SEARCHER: Lazy<AhoCorasick> = Lazy::new(|| {
             AhoCorasick::new_auto_configured(&[
-                "_", "*", "[", "]", "(", ")", "~", "`", ">", "#", "+", "-", "=", "|", "{", "}",
-                ".", "!",
+                r"\", "_", "*", "[", "]", "(", ")", "~", "`", ">", "#", "+", "-", "=", "|", "{",
+                "}", ".", "!",
             ])
         });
 
@@ -96,7 +96,7 @@ impl Markup for MarkdownV2 {
         let s = u.as_str();
 
         static SEARCHER: Lazy<AhoCorasick> =
-            Lazy::new(|| AhoCorasick::new_auto_configured(&["`", ")"]));
+            Lazy::new(|| AhoCorasick::new_auto_configured(&[r"\", ")"]));
 
         let mut dst = String::with_capacity(s.len());
         SEARCHER.replace_all_with(s, &mut dst, precede_with_back_slash);
@@ -224,7 +224,7 @@ mod tests {
         assert_eq!(MarkdownV2.escape("* foobar *"), r"\* foobar \*");
         assert_eq!(
             MarkdownV2.escape(r"_ * [ ] ( ) ~ \ ` > # + - = | { } . !"),
-            r"\_ \* \[ \] \( \) \~ \ \` \> \# \+ \- \= \| \{ \} \. \!",
+            r"\_ \* \[ \] \( \) \~ \\ \` \> \# \+ \- \= \| \{ \} \. \!",
         );
     }
 
@@ -244,7 +244,7 @@ mod tests {
         );
         assert_eq!(
             MarkdownV2.escape_link_url(r"https://example.com/_*[]()~`#+-=|{}.!\".parse().unwrap()),
-            r"https://example.com/_*[](\)~%60#+-=|{}.!\"
+            r"https://example.com/_*[](\)~%60#+-=|{}.!\\"
         );
     }
 
