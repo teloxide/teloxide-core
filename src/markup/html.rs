@@ -2,10 +2,7 @@ use aho_corasick::{AhoCorasick, Match};
 use once_cell::sync::Lazy;
 use reqwest::Url;
 
-use crate::{
-    markup::Markup,
-    types::{User, UserId},
-};
+use crate::markup::Markup;
 
 /// Allows formatting text according "HTML" Telegram markup language. See
 /// [specification].
@@ -35,17 +32,6 @@ impl Markup for Html {
         let url = self.escape(url.as_str());
 
         format!("<a href=\"{url}\">{text}</a>")
-    }
-
-    fn user_mention(&self, text: &str, user_id: UserId) -> String {
-        self.link(text, user_id.url())
-    }
-
-    fn user_mention_or_link(&self, user: &User) -> String {
-        match user.mention() {
-            Some(mention) => mention,
-            None => self.link(&user.full_name(), user.url()),
-        }
     }
 
     fn code_block(&self, code: &str) -> String {
@@ -102,6 +88,8 @@ fn html_replacement(mat: &Match, _: &str, dst: &mut String) -> bool {
 
 #[cfg(test)]
 mod tests {
+    use crate::types::{User, UserId};
+
     use super::*;
 
     #[test]

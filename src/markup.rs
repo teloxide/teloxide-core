@@ -47,10 +47,22 @@ pub trait Markup {
 
     /// Builds an inline user mention link with an anchor.
     #[must_use = "This function does not mutate its input, it returns a newly created string"]
-    fn user_mention(&self, text: &str, user_id: UserId) -> String;
+    fn user_mention(&self, text: &str, user_id: UserId) -> String {
+        self.link(text, user_id.url())
+    }
 
     #[must_use = "This function does not mutate its input, it returns a newly created string"]
-    fn user_mention_or_link(&self, user: &User) -> String;
+    fn user_mention_or_link(&self, user: &User) -> String {
+        match user.mention() {
+            Some(mention) => mention,
+            None => {
+                let name = user.full_name();
+                let name = self.escape(&name);
+
+                self.link(&name, user.url())
+            }
+        }
+    }
 
     /// Formats the code block.
     ///

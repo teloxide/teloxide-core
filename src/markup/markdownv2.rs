@@ -1,7 +1,4 @@
-use crate::{
-    markup::Markup,
-    types::{User, UserId},
-};
+use crate::markup::Markup;
 use aho_corasick::{AhoCorasick, Match};
 use once_cell::sync::Lazy;
 use reqwest::Url;
@@ -46,17 +43,6 @@ impl Markup for MarkdownV2 {
         let url = self.escape_link_url(url);
 
         format!("[{text}]({url})")
-    }
-
-    fn user_mention(&self, text: &str, user_id: UserId) -> String {
-        self.link(text, user_id.url())
-    }
-
-    fn user_mention_or_link(&self, user: &User) -> String {
-        match user.mention() {
-            Some(mention) => mention,
-            None => self.link(&user.full_name(), user.url()),
-        }
     }
 
     fn code_block(&self, code: &str) -> String {
@@ -125,7 +111,7 @@ fn precede_with_back_slash(_: &Match, replaced: &str, dst: &mut String) -> bool 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::User;
+    use crate::types::{User, UserId};
 
     #[test]
     fn test_bold() {
