@@ -11,7 +11,7 @@ use crate::{
 
 /// [`Requester`] with erased type.
 pub struct ErasedRequester<'a, E> {
-    inner: Arc<dyn ErasableRequester<'a, Err = E> + 'a>,
+    inner: Arc<dyn ErasableRequester<'a, Err = E> + Sync + Send + 'a>,
 }
 
 impl<'a, E> ErasedRequester<'a, E> {
@@ -22,7 +22,7 @@ impl<'a, E> ErasedRequester<'a, E> {
     /// [`RequesterExt::erase`]: crate::requests::RequesterExt::erase
     pub fn new<B>(requester: B) -> Self
     where
-        B: Requester<Err = E> + 'a,
+        B: Requester<Err = E> + Sync + Send + 'a,
     {
         Self {
             inner: Arc::new(requester),

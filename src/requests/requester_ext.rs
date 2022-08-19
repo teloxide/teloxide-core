@@ -41,6 +41,7 @@ pub trait RequesterExt: Requester {
     where
         Self: 'a,
         Self: Sized,
+        Self: Sync + Send,
     {
         ErasedRequester::new(self)
     }
