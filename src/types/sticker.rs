@@ -18,6 +18,12 @@ pub struct Sticker {
     /// file.
     pub file_unique_id: String,
 
+    /// Type of the sticker, currently one of “regular”, “mask”, “custom_emoji”. 
+    /// The type of the sticker is independent from its format, 
+    /// which is determined by the fields is_animated and is_video.
+    #[serde(rename = "type")]
+    pub sticker_type: String,
+
     /// Sticker width.
     pub width: u16,
 
@@ -42,6 +48,9 @@ pub struct Sticker {
 
     /// For mask stickers, the position where the mask should be placed.
     pub mask_position: Option<MaskPosition>,
+
+    /// For custom emoji stickers, unique identifier of the custom emoji
+    pub custom_emoji_id: Option<String>,
 
     /// File size in bytes.
     #[serde(default = "crate::types::file::file_size_fallback")]

@@ -15,7 +15,11 @@ pub struct StickerSet {
     /// Sticker set title.
     pub title: String,
 
+    /// Type of stickers in the set, currently one of “regular”, “mask”, “custom_emoji”
+    pub sticker_type: String,
+
     /// Sticker kind shared by all stickers in this set.
+    #[serde(flatten)]
     pub kind: StickerKind,
 
     /// `true`, if the sticker set contains masks.
