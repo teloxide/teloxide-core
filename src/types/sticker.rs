@@ -22,7 +22,7 @@ pub struct Sticker {
     /// The type of the sticker is independent from its format, 
     /// which is determined by the fields is_animated and is_video.
     #[serde(rename = "type")]
-    pub sticker_type: String,
+    pub sticker_type: StickerType,
 
     /// Sticker width.
     pub width: u16,
@@ -55,6 +55,18 @@ pub struct Sticker {
     /// File size in bytes.
     #[serde(default = "crate::types::file::file_size_fallback")]
     pub file_size: u32,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub enum StickerType {
+    #[serde(rename = "regular")]
+    Regular,
+
+    #[serde(rename = "mask")]
+    Mask,
+
+    #[serde(rename = "custom_emoji")]
+    CustomEmoji,
 }
 
 /// Kind of a sticker - webp, animated or video.

@@ -2,7 +2,7 @@ use std::ops::Deref;
 
 use serde::{Deserialize, Serialize};
 
-use crate::types::{PhotoSize, Sticker, StickerKind};
+use crate::types::{PhotoSize, Sticker, StickerKind, StickerType};
 
 /// This object represents a sticker set.
 ///
@@ -16,7 +16,7 @@ pub struct StickerSet {
     pub title: String,
 
     /// Type of stickers in the set, currently one of “regular”, “mask”, “custom_emoji”
-    pub sticker_type: String,
+    pub sticker_type: StickerType,
 
     /// Sticker kind shared by all stickers in this set.
     #[serde(flatten)]
