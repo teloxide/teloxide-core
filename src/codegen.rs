@@ -109,7 +109,7 @@ pub fn ensure_files_contents<'a>(
     }
 
     let (s, were) = match err_count {
-        // No erros, everything is up to date
+        // No errors, everything is up to date
         0 => return,
         // Singular
         1 => ("", "was"),
