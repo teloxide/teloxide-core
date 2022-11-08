@@ -1,3 +1,13 @@
+> **Warning**
+> 
+> This repository used to contain source code for the [`teloxide-core`] crate.
+> We've later decided to move everything into a single repository, namely [`teloxide/teloxide`], to ease the development/maintenance process.
+> To file issues, make PRs, or view current developments, go to the [`teloxide/teloxide`] repository.
+> 
+> [`teloxide-core`]: https://lib.rs/crates/teloxide-core
+> [`teloxide/teloxide`]: https://github.com/teloxide/teloxide
+
+
 <div align="center">
   <img src="media/logo.svg" width="250"/>
 
